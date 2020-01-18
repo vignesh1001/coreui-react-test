@@ -15,7 +15,7 @@ class G500Dashboard extends React.Component {
           title: "Dashboard - G500 Gas Station"
         }
       ]
-    }
+    };
   }
   componentDidMount() {
     let languagebr = localStorage.getItem('language');
