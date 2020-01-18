@@ -219,16 +219,16 @@ class SupplierAnalysis extends React.Component {
                 {
                   doughnut.datasets[0].data.map((item,index)=>
                   (
-                    <Row className="p-0 grid-body">
-                      <Col xs="1" sm="1" md="1" className="p-0 text-left" />
+                    <Row className="grid-body">
+                      <Col xs="1" sm="1" md="1" className="p-0 text-left">{index+1}</Col>
                       <Col xs="5" sm="5" md="5" className="p-0 text-left" style={{color:doughnut.datasets[0].backgroundColor[index]}}>
-                        {doughnut.datasets[0].dataList[index].name}
+                        <b>{doughnut.datasets[0].dataList[index].name}</b>
                       </Col>
                       <Col xs="3" sm="3" md="3" className="p-0 text-left">
                         {doughnut.datasets[0].dataList[index].pctValue}
                       </Col>
                       <Col xs="3" sm="3" md="3" className="p-0 text-left">
-                        <b>{doughnut.datasets[0].dataList[index].volume}</em> Lts
+                        <b>{doughnut.datasets[0].dataList[index].volume}</b> Lts
                       </Col>
                     </Row>
                   )
