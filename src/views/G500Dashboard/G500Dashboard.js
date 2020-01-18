@@ -29,8 +29,8 @@ class G500Dashboard extends React.Component {
             {this.state.g500DataDashBoard_en[0].title}
           </p>
         </div>
-        <Alerts />
         <SupplierAnalysis />
+        <Alerts />
         <Performance />
       </div>
     )
