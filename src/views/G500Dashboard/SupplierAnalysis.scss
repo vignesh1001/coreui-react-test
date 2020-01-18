@@ -1,0 +1,102 @@
+.performance {
+  margin: 10px 0;
+  padding: 10px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  -ms-box-shadow: 0px 0px 4px #0000003D;
+  -o-box-shadow: 0px 0px 4px #0000003D;
+  -webkit-box-shadow: 0px 0px 4px #0000003D;
+  -moz-box-shadow: 0px 0px 4px #0000003D;
+  background: #F7F7F7 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 4px #0000003D;
+  border-radius: 6px;
+  opacity: 1;
+
+  &__title {
+    text-align: left;
+    letter-spacing: 0;
+    color: #333333;
+    opacity: 1;
+    font: normal 22px/26px SF Pro Display;
+  }
+  &__body {
+    font-size: 12px;
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+  }
+  &__table-container {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    margin-bottom: 12px;
+    border-radius: 2px;
+    .table-responsive {
+      overflow: hidden;
+    }
+    &.green {
+      box-shadow: 0px 2px 4px #39B2333D;
+      border: 1px solid #39B2333D;
+    }
+    &.red {
+      box-shadow: 0px 2px 4px #D619193D;
+      border: 1px solid #D619193D;
+    }
+    .title {
+      font: normal 14px/16px Arial;
+      letter-spacing: 0.28px;
+      color: #4D4D4D;
+      margin: 0;
+      padding-top: 6px;
+      margin-bottom: -4px;
+    }
+    table {
+      th {
+        font: Regular 7px/7px Arial;
+        letter-spacing: 0;
+        color: #4C4C4C;
+        padding-top: 8px;
+        padding-bottom: 6px
+      }
+      td {
+        text-align: left;
+        font: Regular 9px/10px Arial;
+        letter-spacing: 0;
+        line-height: 10px;
+        color: #4C4C4C;
+        padding: 5.5px 5.5px 0;
+        p {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  &__title-actions {
+    .view-all-btn,.week-dd-btn {
+      padding-top: 0px;
+      text-align: center;
+      font: Bold 12px/14px Arial;
+      letter-spacing: 0;
+      color: #333333;
+      opacity: 1;
+      background: #F7F7F7 0% 0% no-repeat padding-box;
+      box-shadow: 0px 0px 4px #00000080;
+      border-radius: 6px;
+      opacity: 1;
+    }
+    .view-all-btn{
+      width: 78px;
+      height: 22px;
+      padding-top: 3px;
+      margin-top: 2px;
+      margin-left: 5px;
+    }
+    .week-dd-btn{
+      width: 87px;
+      height: 22px;
+      padding-top: 3px;
+      margin-top: 2px;
+    }
+  }
+}

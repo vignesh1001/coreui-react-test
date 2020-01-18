@@ -14,7 +14,7 @@ import {
   DropdownToggle,
   Table, CardHeader
 } from "reactstrap";
-import './Performance.scss';
+import './SupplierAnalysis.scss';
 import {Doughnut} from "react-chartjs-2";
 
 const styles = {
@@ -28,11 +28,10 @@ const styles = {
 class SupplierAnalysis extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       isWeekDDOpen: false,
       weekDDValue: "This Week",
-
       doughnut : {
         labels: [
           '60%',
@@ -46,6 +45,7 @@ class SupplierAnalysis extends React.Component {
               '#FF6384',
               '#36A2EB',
               '#FFCE56',
+              '#00FFFF'
             ],
           }],
       },
@@ -157,27 +157,36 @@ class SupplierAnalysis extends React.Component {
                     <div className="text-center">Breakdown of Product: <b>Diesel</b></div>
                     <div className="chart-wrapper">
                       <Doughnut data={doughnut} 
-                      options={{
-                        responsive: true,
-                        maintainAspectRatio: true,
-                        legend: {
-                          display: false
-                        },
-                        showAllTooltips:true,
-                        tooltips: {
-                          callbacks: {
-                            title: function() {
-                              return "";
+                        options={{
+                          responsive: true,
+                          maintainAspectRatio: true,
+                          legend: {
+                            display: false
+                          },
+                          showAllTooltips:true,
+                          tooltips: {
+                            callbacks: {
+                              title: function() {
+                                return "";
+                              },
+                              label: function(item, data) {
+                                return data.labels[item.index];
+                              },
+                              labelTextColor: function(tooltipItem, chart) {
+                                console.log(tooltipItem,chart);
+                                return '#000';
+                              }
                             },
-                            label: function(item, data) {
-                              var datasetLabel = data.labels[item.datasetIndex] || "";
-                              var dataPoint = item.yLabel;
-                              console.log(item,data,datasetLabel);
-                              return datasetLabel;
-                            }
+                            displayColors:false,
+                            titleFontSize: 12,
+                            bodyFontColor: '#000',
+                            steppedLine: true,
+                            bodyFontSize: 12,
+                            titleFontStyle: 'normal',
+                            backgroundColor: 'rgba(63,15,255, 0)',
+                            
                           }
-                        }
-                      }}/>
+                        }}/>
                     </div>
                   </Col>
                   <Col xs="8" sm="8" md="8" className="p-0 text-right performance__title-actions">
