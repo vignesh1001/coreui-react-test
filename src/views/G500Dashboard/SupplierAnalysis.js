@@ -33,19 +33,13 @@ class SupplierAnalysis extends React.Component {
       isWeekDDOpen: false,
       weekDDValue: "This Week",
       doughnut : {
-        labels: [
-          '60%',
-          '12%',
-          '18%',
-          '29%',
-        ],
         datasets: [{
-            data: [60, 12, 18,29],
+            data: [50, 12, 18,20],
             backgroundColor: [
-              '#FF6384',
-              '#36A2EB',
-              '#FFCE56',
-              '#00FFFF'
+              '#D532DC',
+              '#6C6B6C',
+              '#DC6032',
+              '#328ADC'
             ],
           }],
       },
@@ -89,7 +83,7 @@ class SupplierAnalysis extends React.Component {
     Chart.Tooltip.positioners.center = function (elements) {
       const { x, y, base } = elements[0]._model;
       const height = base - y;
-      return { x, y: y + (height  2) };
+      return { x, y: y + (height / 2) };
     };
   }
 
@@ -168,11 +162,11 @@ class SupplierAnalysis extends React.Component {
                           legend: {
                             display: false
                           },
-                          showAllTooltips:true,
                           tooltips: {
                             callbacks: {
                               label: function(item, data) {
-                                return data.labels[item.index];
+                                console.log(data);
+                                return data.datasets[0].data[item.index]+'%';
                               },
                               labelTextColor: function(tooltipItem, chart) {
                                 console.log(tooltipItem,chart);
@@ -181,9 +175,9 @@ class SupplierAnalysis extends React.Component {
                             },
                             displayColors:false,
                             titleFontSize: 12,
+                            bodyFontSize: 12,
                             bodyFontColor: '#000',
                             steppedLine: true,
-                            bodyFontSize: 12,
                             titleFontStyle: 'normal',
                             backgroundColor: 'rgba(63,15,255, 0)',
                             footerFontSize :0,
