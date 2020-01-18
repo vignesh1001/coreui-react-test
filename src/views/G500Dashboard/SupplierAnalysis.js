@@ -86,6 +86,11 @@ class SupplierAnalysis extends React.Component {
           }
       }
     });
+    Chart.Tooltip.positioners.center = function (elements) {
+      const { x, y, base } = elements[0]._model;
+      const height = base - y;
+      return { x, y: y + (height  2) };
+    };
   }
 
   onChangeDropdown(e) {
@@ -96,13 +101,13 @@ class SupplierAnalysis extends React.Component {
     const {weekDDValue, isWeekDDOpen,doughnut} = this.state;
     return (
       <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 pdg-0px">
-        <Container className="performance">
+        <Container className="supplier_analysis">
           <Container>
             <Row xs="2" sm="2" md="2">
               <Col xs="4" sm="4" md="4" className="p-0">
-                <p className="performance__title">Supplier Analysis</p>
+                <p className="supplier_analysis__title">Supplier Analysis</p>
               </Col>
-              <Col xs="8" sm="8" md="8" className="p-0 text-right performance__title-actions">
+              <Col xs="8" sm="8" md="8" className="p-0 text-right supplier_analysis__title-actions">
                 <Dropdown
                   className="float-right pr-10"
                   isOpen={isWeekDDOpen}
@@ -149,7 +154,7 @@ class SupplierAnalysis extends React.Component {
               </Col>
             </Row>
           </Container>
-          <Container className="performance__body">
+          <Container className="supplier_analysis__body">
             <Card>
                 <CardBody>
                 <Row xs="2" sm="2" md="2">
@@ -166,9 +171,6 @@ class SupplierAnalysis extends React.Component {
                           showAllTooltips:true,
                           tooltips: {
                             callbacks: {
-                              title: function() {
-                                return "";
-                              },
                               label: function(item, data) {
                                 return data.labels[item.index];
                               },
@@ -184,12 +186,12 @@ class SupplierAnalysis extends React.Component {
                             bodyFontSize: 12,
                             titleFontStyle: 'normal',
                             backgroundColor: 'rgba(63,15,255, 0)',
-                            
+                            footerFontSize :0,
                           }
                         }}/>
                     </div>
                   </Col>
-                  <Col xs="8" sm="8" md="8" className="p-0 text-right performance__title-actions">
+                  <Col xs="8" sm="8" md="8" className="p-0 text-right supplier_analysis__title-actions">
 
                   </Col>
                   </Row>
