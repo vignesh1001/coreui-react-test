@@ -1,0 +1,116 @@
+.g500-dashboard {
+    text-align: left;
+    letter-spacing: 0.48px;
+    color: #1D178A;
+    opacity: 1;
+    font: normal 24px/29px SF Pro Display;
+}
+.alerts {  
+    margin: 10px 0;
+    padding: 10px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -ms-box-shadow: 0px 0px 4px #0000003D;
+    -o-box-shadow: 0px 0px 4px #0000003D;
+    -webkit-box-shadow: 0px 0px 4px #0000003D;
+    -moz-box-shadow: 0px 0px 4px #0000003D;
+    background: #F7F7F7 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 4px #0000003D;
+    border-radius: 6px;
+    opacity: 1;
+
+    &__title {
+      text-align: left;
+      letter-spacing: 0;
+      color: #333333;
+      opacity: 1;
+      font: normal 22px/26px SF Pro Display;
+    }
+
+    &__body {
+      display: flex;
+      font-size: 12px;
+      padding: 3px;
+      margin: 10px 0;
+      -ms-box-shadow: 0px 1px 4px #00000080;
+      -o-box-shadow: 0px 1px 4px #00000080;
+      -webkit-box-shadow: 0px 1px 4px #00000080;
+      -moz-box-shadow: 0px 1px 4px #00000080;
+      background: #FFFFFF 0% 0% no-repeat padding-box;
+      box-shadow: 0px 1px 4px #00000080;
+      opacity: 1;
+
+      &-image {
+        flex: 10%;
+        padding: 2px;
+        text-align: center;
+        font: Italic 10px/11px Arial;
+        opacity: 1;
+        p {
+          margin-bottom: 0px;
+          letter-spacing: 0;
+          color: #1E1E1E;
+        }
+        .alert-images{
+          width: 13px;
+          height: 16px;
+        }
+      }
+
+      &-content {
+        flex: 80%;
+        padding: 2px;
+        letter-spacing: 0;
+        color: #1E1E1E;
+        opacity: 1;
+        text-align: left;
+        p {
+          margin-bottom: 0px;
+          font: normal 10px/11px Arial;
+        }
+        &-title {
+          font: normal 12px/14px Arial;
+        }
+      }
+
+      &-buttons {
+        flex: 10%;
+        padding: 2px;
+        button {
+          padding-top: 0px;
+          text-align: center;
+          font: Bold 12px/14px Arial;
+          letter-spacing: 0;
+          color: #333333;
+          opacity: 1;
+          background: #F7F7F7 0% 0% no-repeat padding-box;
+          box-shadow: 0px 0px 4px #00000080;
+          border-radius: 6px;
+          opacity: 1;
+          width: 97px;
+          height: 16px;
+        }
+      }
+    }
+    
+    &__viewall {
+      width: 30%;
+      margin: 0 auto;
+      button {
+        background: #F7F7F7 0% 0% no-repeat padding-box;
+        box-shadow: 0px 0px 4px #00000080;
+        border-radius: 6px;
+        opacity: 1;
+        width: 97px;
+        height: 24px;
+        text-align: center;
+        font: Bold 12px/14px Arial;
+        letter-spacing: 0;
+        color: #333333;
+        opacity: 1;
+      }
+    }
+}
