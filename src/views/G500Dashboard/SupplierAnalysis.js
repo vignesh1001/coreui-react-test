@@ -16,7 +16,7 @@ import {
   CardHeader
 } from "reactstrap";
 import "./SupplierAnalysis.scss";
-import { Doughnut, } from "react-chartjs-2";
+import { Doughnut,Chart } from "react-chartjs-2";
 
 const styles = {
   header: {
@@ -234,7 +234,9 @@ class SupplierAnalysis extends React.Component {
                   )
                   )
                 }
-                
+                <div className="viewall">
+                    <button>View All</button>
+                </div>
               </Col>
             </Row>
           </Container>
