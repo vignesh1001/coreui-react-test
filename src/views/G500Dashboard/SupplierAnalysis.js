@@ -33,6 +33,8 @@ class SupplierAnalysis extends React.Component {
     this.state = {
       isWeekDDOpen: false,
       weekDDValue: "This Week",
+      isFuelDDOpen: false,
+      fuelDDValue: "Diesel",
       doughnut: {
         datasets: [
           {
@@ -90,12 +92,12 @@ class SupplierAnalysis extends React.Component {
     });
   }
 
-  onChangeDropdown(e) {
-    this.setState({ weekDDValue: e.currentTarget.textContent });
+  onChange(e,stateName) {
+    this.setState({ []: e.currentTarget.textContent });
   }
 
   render() {
-    const { weekDDValue, isWeekDDOpen, doughnut } = this.state;
+    const { weekDDValue, isWeekDDOpen, doughnut,isFuelDDOpen,fuelDDValue } = this.state;
     return (
       <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 pdg-0px">
         <Container className="supplier_analysis">
@@ -112,20 +114,20 @@ class SupplierAnalysis extends React.Component {
               >
                 <Dropdown
                   className="float-right pr-10"
-                  isOpen={isWeekDDOpen}
+                  isOpen={isFuelDDOpen}
                   toggle={() =>
-                    this.setState({ isWeekDDOpen: !this.state.isWeekDDOpen })
+                    this.setState({ isFuelDDOpen: !isFuelDDOpen })
                   }
                 >
                   <DropdownToggle caret className="week-dd-btn">
-                    {weekDDValue}
+                    {fuelDDValue}
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem>
-                      <div onClick={e => this.onChangeDropdown(e)}>Diesel</div>
+                      <div onClick={e => this.onChange(e,'fuelDDValue')}>Diesel</div>
                     </DropdownItem>
                     <DropdownItem>
-                      <div onClick={e => this.onChangeDropdown(e)}>Petrol</div>
+                      <div onClick={e => this.onChange(e,'fuelDDValue')}>Petrol</div>
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -133,7 +135,7 @@ class SupplierAnalysis extends React.Component {
                   className="float-right pr-10"
                   isOpen={isWeekDDOpen}
                   toggle={() =>
-                    this.setState({ isWeekDDOpen: !this.state.isWeekDDOpen })
+                    this.setState({ isWeekDDOpen: !isWeekDDOpen })
                   }
                 >
                   <DropdownToggle caret className="week-dd-btn">
@@ -141,17 +143,17 @@ class SupplierAnalysis extends React.Component {
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem>
-                      <div onClick={e => this.onChangeDropdown(e)}>
+                      <div onClick={e => this.onChange(e,'weekDDValue')}>
                         This Week
                       </div>
                     </DropdownItem>
                     <DropdownItem>
-                      <div onClick={e => this.onChangeDropdown(e)}>
+                      <div onClick={e => this.onChange(e,'weekDDValue')}>
                         Last Week
                       </div>
                     </DropdownItem>
                     <DropdownItem>
-                      <div onClick={e => this.onChangeDropdown(e)}>
+                      <div onClick={e => this.onChange(e,'weekDDValue')}>
                         Last 2 Weeks
                       </div>
                     </DropdownItem>
@@ -175,7 +177,7 @@ class SupplierAnalysis extends React.Component {
                       legend: {
                         display: false
                       },
-                      showAllTooltips:
+                      showAllTooltips:true,
                       tooltips: {
                         callbacks: {
                           label: function(item, data) {
