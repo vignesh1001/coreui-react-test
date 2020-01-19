@@ -62,10 +62,10 @@ class TotalRevenue extends React.Component {
         <Container className="total_revenue">
           <Container>
             <Row xs="2" sm="2" md="2">
-              <Col xs="4" sm="4" md="4" className="p-0">
+              <Col xs="8" sm="8" md="8" className="p-0">
                 <p className="total_revenue__title">Total Revenue</p>
               </Col>
-              <Col xs="8" sm="8" md="8" className="p-0 text-right total_revenue__title-actions">
+              <Col xs="4" sm="8" md="8" className="p-0 text-right total_revenue__title-actions">
                 <Dropdown
                   className="float-right pr-10"
                   isOpen={isWeekDDOpen}
