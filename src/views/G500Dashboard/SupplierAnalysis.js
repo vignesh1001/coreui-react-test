@@ -175,6 +175,7 @@ class SupplierAnalysis extends React.Component {
                       legend: {
                         display: false
                       },
+                      showAllTooltips:
                       tooltips: {
                         callbacks: {
                           label: function(item, data) {
@@ -192,8 +193,15 @@ class SupplierAnalysis extends React.Component {
                         steppedLine: true,
                         titleFontStyle: "normal",
                         backgroundColor: "rgba(63,15,255, 0)",
-                        footerFontSize: 0
-                      }
+                        footerFontSize: 0,
+                        labels:{
+                          render:'label',
+                          position:'outside',
+                        }
+                      },labels:{
+                          render:'label',
+                          position:'outside',
+                        }
                     }}
                   />
                 </div>
