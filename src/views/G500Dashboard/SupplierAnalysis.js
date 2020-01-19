@@ -16,7 +16,7 @@ import {
   CardHeader
 } from "reactstrap";
 import "./SupplierAnalysis.scss";
-import { Doughnut } from "react-chartjs-2";
+import { Doughnut, } from "react-chartjs-2";
 
 const styles = {
   header: {
@@ -171,7 +171,7 @@ class SupplierAnalysis extends React.Component {
                     data={doughnut}
                     options={{
                       responsive: true,
-                      maintainAspectRatio: true,
+                      maintainAspectRatio: false,
                       legend: {
                         display: false
                       },
