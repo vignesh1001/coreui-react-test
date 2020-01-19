@@ -17,7 +17,7 @@ import {
 } from "reactstrap";
 import "./SupplierAnalysis.scss";
 import { Doughnut,Chart } from "react-chartjs-2";
-
+import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 const styles = {
   header: {
     fontSize: 22,
@@ -93,7 +93,7 @@ class SupplierAnalysis extends React.Component {
   }
 
   onChange(e,stateName) {
-    this.setState({ []: e.currentTarget.textContent });
+    this.setState({ [stateName]: e.currentTarget.textContent });
   }
 
   render() {
@@ -194,16 +194,13 @@ class SupplierAnalysis extends React.Component {
                         bodyFontColor: "#000",
                         steppedLine: true,
                         titleFontStyle: "normal",
-                        backgroundColor: "rgba(63,15,255, 0)",
+                        backgroundColor: "rgba(63,15,255,0)",
                         footerFontSize: 0,
                         labels:{
-                          render:'label',
-                          position:'outside',
-                        }
-                      },labels:{
-                          render:'label',
-                          position:'outside',
-                        }
+                          render: 'label',
+                          position: 'outside',
+                        },
+                      }
                     }}
                   />
                 </div>
