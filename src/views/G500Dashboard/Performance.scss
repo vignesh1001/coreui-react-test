@@ -12,7 +12,6 @@
   -moz-box-shadow: 0px 0px 4px #0000003D;
   background: #F7F7F7 0% 0% no-repeat padding-box;
   box-shadow: 0px 0px 4px #0000003D;
-  border-radius: 6px;
   opacity: 1;
 
   &__title {
@@ -53,7 +52,7 @@
     }
     table {
       th {
-        font: Regular 7px/7px Arial;
+        font: normal 7px/7px Arial;
         letter-spacing: 0;
         color: #4C4C4C;
         padding-top: 8px;
@@ -61,7 +60,7 @@
       }
       td {
         text-align: left;
-        font: Regular 9px/10px Arial;
+        font: normal 9px/10px Arial;
         letter-spacing: 0;
         line-height: 10px;
         color: #4C4C4C;
@@ -79,7 +78,6 @@
       font: Bold 12px/14px Arial;
       letter-spacing: 0;
       color: #333333;
-      opacity: 1;
       background: #F7F7F7 0% 0% no-repeat padding-box;
       box-shadow: 0px 0px 4px #00000080;
       border-radius: 6px;
