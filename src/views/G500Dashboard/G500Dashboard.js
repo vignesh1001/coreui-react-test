@@ -3,6 +3,7 @@ import Alerts from './Alerts.js';
 import Performance from "./Performance";
 import SupplierAnalysis from "./SupplierAnalysis";
 import TotalRevenue from "./TotalRevenue";
+import BarChart from './BarChart';
 import './Alerts.scss';
 
 class G500Dashboard extends React.Component {
@@ -30,10 +31,12 @@ class G500Dashboard extends React.Component {
             {this.state.g500DataDashBoard_en[0].title}
           </p>
         </div>
-        <SupplierAnalysis />
-        <Alerts />
-        <Performance />
-        <TotalRevenue />
+        {/* <SupplierAnalysis />
+         <Alerts />
+         <Performance />
+         <TotalRevenue />
+         */}
+        <BarChart />
       </div>
     )
   }

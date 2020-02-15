@@ -38,10 +38,7 @@ const User = React.lazy(() => import('./views/Users/User'));
 // const alarmalerts = React.lazy(() => import('./Dashboard/AlertsandNotifications/Alarmalerts'));
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-
   { path: '/', exact: true, name: 'Home' },
- 
-  
   { path: '/g500Dashboard', name: 'G500 Dashboard', component: G500Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },
