@@ -44,6 +44,7 @@ class BarChart extends React.Component {
             backgroundColor: "#45a973",
             pointBorderWidth: 5,
             yAxisID: "y-axis-1",
+            //xAxisID: "x-axis-1",
             datalabels: {
               color: 'white',
               formatter: function(value, context) {
@@ -52,19 +53,18 @@ class BarChart extends React.Component {
             }
           },
           {
-            label: "Sales",
             type: "line",
-            data: [10, 10, 10, 10, 10],
-            labelData: ['min\n4,000', 'min\n5,000', 'min\n11,000', 'min\n4,000', 'min\n4,000'],
-            position: "bottom",
+            data: [90, 90, 90, 90, 90],
+            labelData: ['max\n48,000', 'max\n5,000', 'max\n11,000', 'max\n4,000', 'max\n4,000'],
             fill: false,
-            borderColor: "#da9aaa",
+            borderColor: "#c9606f",
+            //xAxisID: "x-axis-2",
             yAxisID: "y-axis-2",
             datalabels: {
               color: 'black',
               align: 'start',
               anchor: 'start',
-              offset: -10,
+              offset: 0,
               formatter: function(value, context) {
                 return context.chart.data.datasets[1].labelData[context.dataIndex];
               },
@@ -73,10 +73,36 @@ class BarChart extends React.Component {
               },
               align:'right',
               padding: {
-                right: 55,
+                right: 48,
               }
             }
-          }
+          },
+          {
+            type: "scatter",showLine: true,
+            data: [10, 10, 10, 10, 10],
+            labelData: ['min\n4,000', 'min\n5,000', 'min\n11,000', 'min\n4,000', 'min\n4,000'],
+            fill: false,
+            borderColor: "#c9606f",
+            //xAxisID: "x-axis-3",
+            yAxisID: "y-axis-3",
+            datalabels: {
+              color: 'black',
+              align: 'start',
+              anchor: 'start',
+              formatter: function(value, context) {
+                return context.chart.data.datasets[2].labelData[context.dataIndex];
+              },
+              font:{
+                size:10,
+                style:''
+              },
+              align:'right',
+              padding: {
+                right: 40,
+              }
+            },
+          },
+          
         ]
       },
        options: {
@@ -87,13 +113,18 @@ class BarChart extends React.Component {
                 fontStyle: "bold",
                 fontFamily: "Roboto",
                 fontSize: 12,
-              }
-            }],
+              },
+              gridLines: {
+                color: "rgba(0, 0, 0, 0)",
+              },
+              categoryPercentage: 0.5,
+              barPercentage: 1.2,
+            }
+            ],
             yAxes: [
               {
                 ticks: {
                   max: 100,
-                  min: 0,
                   stepSize: 20,
                   beginAtZero: true,
                   callback: function(label, index, labels) {
@@ -105,12 +136,22 @@ class BarChart extends React.Component {
               {
                 ticks: {
                   max: 100,
-                  min: 0,
-                  stepSize: 20,
+                  min: 10,
+                  stepSize: 1,
                   beginAtZero: true,
                 },
                 display: false,
                 id: "y-axis-2",
+              },
+              {
+                ticks: {
+                  beginAtZero: true,
+                  max: 100,
+                  min: 0,
+                  stepSize: 10,
+                },
+                display: false,
+                id: "y-axis-3",
               }
             ]
           },
@@ -121,6 +162,8 @@ class BarChart extends React.Component {
             enabled: false,
             custom: CustomTooltips
           },
+          responsive: true,
+          maintainAspectRatio: false,
         }
     };
   }
