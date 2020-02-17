@@ -226,7 +226,7 @@ class BarChart extends React.Component {
     return (
       <div className="col-lg-8 col-md-8 col-sm-10 col-xs-12 pdg-0px">
         <Container className="bar-chart">
-          <Container className="bar-chart__body">
+          <Container className="total_revenue__body">
             <Card>
               <CardBody>
                 <div className="chart-wrapper">
