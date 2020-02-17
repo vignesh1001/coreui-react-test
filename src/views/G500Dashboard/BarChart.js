@@ -63,18 +63,14 @@ class BarChart extends React.Component {
             yAxisID: "y-axis-2",
             datalabels: {
               color: 'black',
-              align: 'start',
               anchor: 'start',
               offset: 0,
               formatter: function(value, context) {
                 return context.chart.data.datasets[1].labelData[context.dataIndex];
               },
-              font:{
-                size:10,
-              },
+              font:{size:10,style:'bold'},
               align:'right',
-              padding: {
-                right: 30,
+              padding: {right: 30,
               }
             }
           },
@@ -88,7 +84,6 @@ class BarChart extends React.Component {
             yAxisID: "y-axis-3",
             datalabels: {
               color: 'black',
-              align: 'start',
               anchor: 'start',
               formatter: function(value, context) {
                 return context.chart.data.datasets[2].labelData[context.dataIndex];
@@ -107,6 +102,7 @@ class BarChart extends React.Component {
             type: "bar",
             label: "My First dataset 2",
             data: [7,65,64,23,4],
+            labelData: ['Tangue 1\n73,987', 'Tangue 1\n73,987', 'Tangue 1\n73,987', 'Tangue 1\n73,987', 'Tangue 1\n73,987'],
             borderWidth: 1,
             backgroundColor: "rgba(152, 152, 208, 0.2)",
             pointBorderWidth: 5,
@@ -114,15 +110,31 @@ class BarChart extends React.Component {
             stack: 'Stack 1',
             //xAxisID: "x-axis-1",
             datalabels: {
-              color: 'red',
+              color: 'black',
+              anchor: 'start',
               formatter: function(value, context) {
-                return '';
+                return context.chart.data.datasets[3].labelData[context.dataIndex];
+              },
+              font:{
+                size:12,
+                style:'bold'
+              },
+              align: 'end',
+						  anchor: 'end',
+              padding: {
+                right: 30,
+                top:10,
               }
             }
           },
         ]
       },
        options: {
+         layout: {
+            padding: {
+              top: 25
+            }
+          },
           scales: {
             xAxes: [{
               ticks: {
@@ -173,7 +185,7 @@ class BarChart extends React.Component {
               },
               {stacked: true,display: false,
                 ticks: {display: false,
-                  max: 100,
+                  max: 200,
                   stepSize: 20,
                   beginAtZero: true,
                   callback: function(label, index, labels) {
