@@ -44,6 +44,7 @@ class BarChart extends React.Component {
             backgroundColor: "#45a973",
             pointBorderWidth: 5,
             yAxisID: "y-axis-1",
+            stack: 'Stack 1',
             //xAxisID: "x-axis-1",
             datalabels: {
               color: 'white',
@@ -73,7 +74,7 @@ class BarChart extends React.Component {
               },
               align:'right',
               padding: {
-                right: 48,
+                right: 30,
               }
             }
           },
@@ -94,15 +95,31 @@ class BarChart extends React.Component {
               },
               font:{
                 size:10,
-                style:''
+                style:'bold'
               },
               align:'right',
               padding: {
-                right: 40,
+                right: 30,
               }
             },
           },
-          
+          {
+            type: "bar",
+            label: "My First dataset 2",
+            data: [7,65,64,23,4],
+            borderWidth: 1,
+            backgroundColor: "rgba(152, 152, 208, 0.2)",
+            pointBorderWidth: 5,
+            yAxisID: "y-axis-1",
+            stack: 'Stack 1',
+            //xAxisID: "x-axis-1",
+            datalabels: {
+              color: 'red',
+              formatter: function(value, context) {
+                return '';
+              }
+            }
+          },
         ]
       },
        options: {
@@ -119,10 +136,11 @@ class BarChart extends React.Component {
               },
               categoryPercentage: 0.5,
               barPercentage: 1.2,
+              stacked: true,
             }
             ],
             yAxes: [
-              {
+              {stacked: true,
                 ticks: {
                   max: 100,
                   stepSize: 20,
@@ -152,8 +170,18 @@ class BarChart extends React.Component {
                 },
                 display: false,
                 id: "y-axis-3",
-              }
-            ]
+              },
+              {stacked: true,display: false,
+                ticks: {display: false,
+                  max: 100,
+                  stepSize: 20,
+                  beginAtZero: true,
+                  callback: function(label, index, labels) {
+                    return '';
+                  }
+                },
+                id: "y-axis-4",
+              },            ]
           },
           legend: {
             display: false
