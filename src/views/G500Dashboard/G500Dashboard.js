@@ -4,6 +4,7 @@ import Performance from "./Performance";
 import SupplierAnalysis from "./SupplierAnalysis";
 import TotalRevenue from "./TotalRevenue";
 import BarChart from './BarChart';
+import OneBarChart from './OneBarChart';
 import './Alerts.scss';
 
 class G500Dashboard extends React.Component {
