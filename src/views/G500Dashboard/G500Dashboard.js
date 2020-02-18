@@ -37,7 +37,7 @@ class G500Dashboard extends React.Component {
          <Performance />
          <TotalRevenue />
          */}
-        <BarChart />
+        <OneBarChart />
       </div>
     )
   }

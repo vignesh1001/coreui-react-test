@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 import "chartjs-plugin-datalabels";
 import "./OneBarChart.scss";
-import { Bar, Chart } from "react-chartjs-2";
+import { Line, Chart } from "react-chartjs-2";
 import { CustomTooltips } from "@coreui/coreui-plugin-chartjs-custom-tooltips";
 
 const styles = {
@@ -31,11 +31,11 @@ class OneBarChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      percentageList: [83, 25, 26, 67, 86],
-      chartLabels: ["DIESEL", "DIESEL", "DIESEL", "REGULAR", "PREMINUM"],
-      minList: [4000,5000,11000,4000,4000],
-      maxList: [38000,47500,104500,38000,38000],
-      tangueList: [33114,12544,28531,28531,28531],
+      percentageList: ['',83,''],
+      chartLabels: ['',"DIESEL",''],
+      minList: ['','',4000],
+      maxList: ['','',38000],
+      tangueList: ['',33114,''],
       isWeekDDOpen: false,
       weekDDValue: "This Week"
     };
@@ -90,43 +90,36 @@ class OneBarChart extends React.Component {
             padding: { right: 30, top: 10 }
           }
         },
-        {
-          type: "line",
-          fill: false,
-          borderColor: "#c9606f",
-          yAxisID: "y-axis-2",
+        {spanGaps:true,
+          type: "line",fill: false,
+          borderColor: "#c9606f",yAxisID: "y-axis-2",
           datalabels: {
-            color: "black",
-            anchor: "start",
-            offset: 0,
+            color: "black",offset: 0,
+            align: "left",anchor: "bottom",
             formatter: function(value, context) {
               return context.chart.data.datasets[2].labelData[
                 context.dataIndex
               ];
             },
             font: { size: 10, style: "bold" },
-            align: "right",
-            padding: { right: 30 }
+            padding: { right: -10 }
           },
           ...this.getMaxValues()
         },
         {
-          type: "scatter",
-          showLine: true,
-          fill: false,
-          borderColor: "#c9606f",
+          type: "scatter",showLine: true,
+          fill: false,borderColor: "#c9606f",
           yAxisID: "y-axis-3",
           datalabels: {
             color: "black",
-            anchor: "start",
+            align: "left",anchor: "bottom",
             formatter: function(value, context) {
               return context.chart.data.datasets[3].labelData[
                 context.dataIndex
               ];
             },
             font: { size: 10, style: "bold" },
-            align: "right",
-            padding: { right: 30 }
+            padding: { right: -10 }
           },
           ...this.getMinValues()
         }
@@ -149,7 +142,7 @@ class OneBarChart extends React.Component {
             },
             gridLines: { color: "rgba(0, 0, 0, 0)" },
             categoryPercentage: 0.5,
-            barPercentage: 1.2,
+            barPercentage: 0.6,
             stacked: true
           }
         ],
@@ -167,7 +160,7 @@ class OneBarChart extends React.Component {
             }
           },
           {
-            ticks: { max: 100, min: 10, stepSize: 1, beginAtZero: true },
+            ticks: { max: 100, min: 0, stepSize: 1, beginAtZero: true },
             display: false,
             id: "y-axis-2"
           },
@@ -201,22 +194,22 @@ class OneBarChart extends React.Component {
     const { minList } = this.state;
     return {
       data: minList.map(() => 10),
-      labelData: minList.map(i => `mix\n${this.numberWithCommas(i)}`)
+      labelData: minList.map(i => i && `mix\n${this.numberWithCommas(i)}`)
     };
   }
   getMaxValues() {
     const { maxList } = this.state;
     return {
       data: maxList.map(() => 90),
-      labelData: maxList.map(i => `max\n${this.numberWithCommas(i)}`)
+      labelData: maxList.map(i => i && `max\n${this.numberWithCommas(i)}`)
     };
   }
   getTangueValues() {
     const { percentageList, tangueList } = this.state;
-    const data = percentageList.map(i => 100 - i);
+    const data = percentageList.map(i => i && 100 - i);
     return {
       data,
-      labelData: tangueList.map((v, i) => `Tangue ${i + 1}\n${this.numberWithCommas(v)}`)
+      labelData: tangueList.map((v, i) => v && `Tangue ${i + 1}\n${this.numberWithCommas(v)}`)
     };
   }
 
@@ -230,7 +223,7 @@ class OneBarChart extends React.Component {
             <Card>
               <CardBody>
                 <div className="chart-wrapper">
-                  <Bar data={data} options={options} />
+                  <Line data={data} options={options} />
                 </div>
               </CardBody>
             </Card>
