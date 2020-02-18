@@ -94,7 +94,7 @@ class OneBarChart extends React.Component {
           type: "line",fill: false,
           borderColor: "#c9606f",yAxisID: "y-axis-2",
           datalabels: {
-            color: "black",offset: 0,
+            color: "black",
             align: "left",anchor: "bottom",
             formatter: function(value, context) {
               return context.chart.data.datasets[2].labelData[
@@ -106,7 +106,7 @@ class OneBarChart extends React.Component {
           },
           ...this.getMaxValues()
         },
-        {
+        {spanGaps: false,
           type: "scatter",showLine: true,
           fill: false,borderColor: "#c9606f",
           yAxisID: "y-axis-3",
