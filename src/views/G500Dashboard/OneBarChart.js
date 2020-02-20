@@ -19,7 +19,7 @@ import "./OneBarChart.scss";
 import { Line, Chart } from "react-chartjs-2";
 import { CustomTooltips } from "@coreui/coreui-plugin-chartjs-custom-tooltips";
 
-const styles = { 
+const styles = {
   header: {
     fontSize: 22,
     letterSpacing: 0,
@@ -31,11 +31,11 @@ class OneBarChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      percentageList: ['',83,''],
-      chartLabels: ['',"DIESEL",''],
-      minList: ['','',4000],
-      maxList: ['','',38000],
-      tangueList: ['',33114,''],
+      percentageList: ["", 19, ""],
+      chartLabels: ["", "DIESEL", ""],
+      minList: ["", "", 4000],
+      maxList: ["", "", 38000],
+      tangueList: ["", 33114, ""],
       isWeekDDOpen: false,
       weekDDValue: "This Week"
     };
@@ -46,6 +46,14 @@ class OneBarChart extends React.Component {
   }
   getChartData() {
     const { percentageList, chartLabels } = this.state;
+    const pctVal = percentageList.find(e => e);
+    const barBgColor =
+      pctVal < 10 || pctVal > 95
+        ? ["#f00", '#f00"', "#f00"]
+        : pctVal < 20
+        ? ["#f0f009", '#f0f009"', "#f0f009"]
+        : ["#45a973", '#45a973"', "#45a973"];
+    const chartFontColor =  pctVal < 20?'black':"white"
     return {
       labels: chartLabels,
       datasets: [
@@ -54,12 +62,12 @@ class OneBarChart extends React.Component {
           label: "1",
           data: percentageList,
           borderWidth: 1,
-          backgroundColor: "#45a973",
+          backgroundColor: barBgColor,
           pointBorderWidth: 5,
           yAxisID: "y-axis-1",
           stack: "Stack 1",
           datalabels: {
-            color: "white",
+            color: chartFontColor,
             formatter: function(value, context) {
               return (
                 context.chart.data.datasets[0].data[context.dataIndex] + "%"
@@ -72,7 +80,7 @@ class OneBarChart extends React.Component {
           label: "2",
           ...this.getTangueValues(),
           borderWidth: 1,
-          backgroundColor: "rgba(152, 152, 208, 0.2)",
+          backgroundColor: "#FFF",
           pointBorderWidth: 5,
           yAxisID: "y-axis-1",
           stack: "Stack 1",
@@ -90,13 +98,29 @@ class OneBarChart extends React.Component {
             padding: { right: 30, top: 10 }
           }
         },
-        {spanGaps:true,
-          type: "line",fill: false,
-          borderColor: "#c9606f",yAxisID: "y-axis-2",
+        {
+          spanGaps: true,
+          type: "line",
+          fill: false,
+          borderColor: "#c9606f",
+          yAxisID: "y-axis-2",
           datalabels: {
-            color: "black",
-            align: "left",anchor: "bottom",
+            color: function(context) {
+             if(context.dataIndex===0) {
+                 return 'blue';
+             } else {
+                 return 'black';
+             }
+            },
+            align: "top",
+            anchor: "bottom",
             formatter: function(value, context) {
+              if(context.dataIndex===0){
+                context.chart.chartArea.left=50;
+                context.chart.$datalabels._datasets[0][0]._el._yScale.left=10
+
+                //console.log(context.chart)
+              }
               return context.chart.data.datasets[2].labelData[
                 context.dataIndex
               ];
@@ -106,20 +130,33 @@ class OneBarChart extends React.Component {
           },
           ...this.getMaxValues()
         },
-        {spanGaps: false,
-          type: "scatter",showLine: true,
-          fill: false,borderColor: "#c9606f",
+        {
+          spanGaps: false,
+          type: "scatter",
+          showLine: true,
+          fill: false,
+          borderColor: "#c9606f",
           yAxisID: "y-axis-3",
           datalabels: {
-            color: "black",
-            align: "left",anchor: "bottom",
+            // color: "black",
+            color: function(context) {
+            //  var index = context.dataIndex;
+            //  var value = context.dataset.data[index];
+             if(context.dataIndex===0) {
+                 return 'blue';
+             } else {
+                 return 'black';
+             }
+            },
+            align: "top",
+            anchor: "bottom",
             formatter: function(value, context) {
               return context.chart.data.datasets[3].labelData[
                 context.dataIndex
               ];
             },
             font: { size: 10, style: "bold" },
-            padding: { right: -10 }
+            padding: { right: 10, top: 0 }
           },
           ...this.getMinValues()
         }
@@ -165,7 +202,7 @@ class OneBarChart extends React.Component {
             id: "y-axis-2"
           },
           {
-            ticks: { beginAtZero: true, max: 100, min: 0, stepSize: 10 },
+            ticks: { max: 100, min: 0, stepSize: 1, beginAtZero: true },
             display: false,
             id: "y-axis-3"
           },
@@ -194,14 +231,18 @@ class OneBarChart extends React.Component {
     const { minList } = this.state;
     return {
       data: minList.map(() => 10),
-      labelData: minList.map(i => i && `mix\n${this.numberWithCommas(i)}`)
+      labelData: minList.map((i, index) =>
+        index === 0 ? `10%` : i && `min\n${this.numberWithCommas(i)}`
+      )
     };
   }
   getMaxValues() {
     const { maxList } = this.state;
     return {
       data: maxList.map(() => 90),
-      labelData: maxList.map(i => i && `max\n${this.numberWithCommas(i)}`)
+      labelData: maxList.map((i, index) =>
+        index === 0 ? `90%` : i && `max\n${this.numberWithCommas(i)}`
+      )
     };
   }
   getTangueValues() {
@@ -209,7 +250,9 @@ class OneBarChart extends React.Component {
     const data = percentageList.map(i => i && 100 - i);
     return {
       data,
-      labelData: tangueList.map((v, i) => v && `Tangue ${i + 1}\n${this.numberWithCommas(v)}`)
+      labelData: tangueList.map(
+        (v, i) => v && `Tangue ${i + 1}\n${this.numberWithCommas(v)}`
+      )
     };
   }
 
