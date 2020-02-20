@@ -11,7 +11,7 @@ import {
   Col,
   DropdownItem,
   DropdownMenu,
-  DropdownToggle, 
+  DropdownToggle,
   Table
 } from "reactstrap";
 import "chartjs-plugin-datalabels";
@@ -31,11 +31,13 @@ class OneBarChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      percentageList: ["", 19, ""],
+      percentageList: ["", 50, ""],
       chartLabels: ["", "DIESEL", ""],
-      minList: ["", "", 4000],
-      maxList: ["", "", 38000],
-      tangueList: ["", 33114, ""],
+      minValueList: ["", "", 5000],
+      minPctList: [10, 10, 10],
+      maxValueList: ["", "", 47500],
+      maxPctList: [60, 60, 60],
+      tangueList: ["", 50000, ""],
       isWeekDDOpen: false,
       weekDDValue: "This Week"
     };
@@ -53,7 +55,7 @@ class OneBarChart extends React.Component {
         : pctVal < 20
         ? ["#f0f009", '#f0f009"', "#f0f009"]
         : ["#45a973", '#45a973"', "#45a973"];
-    const chartFontColor =  pctVal < 20?'black':"white"
+    const chartFontColor = pctVal < 20 ? "black" : "white";
     return {
       labels: chartLabels,
       datasets: [
@@ -106,18 +108,18 @@ class OneBarChart extends React.Component {
           yAxisID: "y-axis-2",
           datalabels: {
             color: function(context) {
-             if(context.dataIndex===0) {
-                 return 'blue';
-             } else {
-                 return 'black';
-             }
+              if (context.dataIndex === 0) {
+                return "blue";
+              } else {
+                return "black";
+              }
             },
             align: "top",
             anchor: "bottom",
             formatter: function(value, context) {
-              if(context.dataIndex===0){
-                context.chart.chartArea.left=50;
-                context.chart.$datalabels._datasets[0][0]._el._yScale.left=10
+              if (context.dataIndex === 0) {
+                context.chart.chartArea.left = 50;
+                context.chart.$datalabels._datasets[0][0]._el._yScale.left = 10;
 
                 //console.log(context.chart)
               }
@@ -140,13 +142,13 @@ class OneBarChart extends React.Component {
           datalabels: {
             // color: "black",
             color: function(context) {
-            //  var index = context.dataIndex;
-            //  var value = context.dataset.data[index];
-             if(context.dataIndex===0) {
-                 return 'blue';
-             } else {
-                 return 'black';
-             }
+              //  var index = context.dataIndex;
+              //  var value = context.dataset.data[index];
+              if (context.dataIndex === 0) {
+                return "blue";
+              } else {
+                return "black";
+              }
             },
             align: "top",
             anchor: "bottom",
@@ -177,7 +179,7 @@ class OneBarChart extends React.Component {
               fontFamily: "Roboto",
               fontSize: 12
             },
-            gridLines: { color: "rgba(0, 0, 0, 0)" },
+            gridLines: { display: false },
             categoryPercentage: 0.5,
             barPercentage: 0.6,
             stacked: true
@@ -193,18 +195,21 @@ class OneBarChart extends React.Component {
               beginAtZero: true,
               callback: function(label, index, labels) {
                 return label + "%";
-              }
+              },
+              gridLines: { display: false }
             }
           },
           {
             ticks: { max: 100, min: 0, stepSize: 1, beginAtZero: true },
             display: false,
-            id: "y-axis-2"
+            id: "y-axis-2",
+            gridLines: { display: false }
           },
           {
             ticks: { max: 100, min: 0, stepSize: 1, beginAtZero: true },
             display: false,
-            id: "y-axis-3"
+            id: "y-axis-3",
+            gridLines: { display: false }
           },
           {
             stacked: true,
@@ -217,7 +222,8 @@ class OneBarChart extends React.Component {
               }
             },
             display: false,
-            id: "y-axis-4"
+            id: "y-axis-4",
+            gridLines: { display: false }
           }
         ]
       },
@@ -228,20 +234,24 @@ class OneBarChart extends React.Component {
     };
   }
   getMinValues() {
-    const { minList } = this.state;
+    const { minValueList, minPctList } = this.state;
     return {
-      data: minList.map(() => 10),
-      labelData: minList.map((i, index) =>
-        index === 0 ? `10%` : i && `min\n${this.numberWithCommas(i)}`
+      data: minPctList,
+      labelData: minValueList.map((i, index) =>
+        index === 0
+          ? `${minPctList[0]}%`
+          : i && `min\n${this.numberWithCommas(i)}`
       )
     };
   }
   getMaxValues() {
-    const { maxList } = this.state;
+    const { maxValueList, maxPctList } = this.state;
     return {
-      data: maxList.map(() => 90),
-      labelData: maxList.map((i, index) =>
-        index === 0 ? `90%` : i && `max\n${this.numberWithCommas(i)}`
+      data: maxPctList,
+      labelData: maxValueList.map((i, index) =>
+        index === 0
+          ? `${maxPctList[0]}%`
+          : i && `max\n${this.numberWithCommas(i)}`
       )
     };
   }
