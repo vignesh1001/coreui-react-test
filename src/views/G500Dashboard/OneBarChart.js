@@ -19,7 +19,7 @@ import "./OneBarChart.scss";
 import { Line, Chart } from "react-chartjs-2";
 import { CustomTooltips } from "@coreui/coreui-plugin-chartjs-custom-tooltips";
 
-const styles = {
+const styles = { 
   header: {
     fontSize: 22,
     letterSpacing: 0,
