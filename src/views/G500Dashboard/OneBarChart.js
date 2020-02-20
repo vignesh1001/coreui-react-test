@@ -11,7 +11,7 @@ import {
   Col,
   DropdownItem,
   DropdownMenu,
-  DropdownToggle,
+  DropdownToggle, 
   Table
 } from "reactstrap";
 import "chartjs-plugin-datalabels";
