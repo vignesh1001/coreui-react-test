@@ -97,7 +97,7 @@ class OneBarChart extends React.Component {
             font: { size: 12, style: "bold" },
             align: "end",
             anchor: "end",
-            padding: { right: 30, top: 10 }
+            padding: { right: 30, top: 10 },
           }
         },
         {
@@ -106,6 +106,7 @@ class OneBarChart extends React.Component {
           fill: false,
           borderColor: "#c9606f",
           yAxisID: "y-axis-2",
+          
           datalabels: {
             color: function(context) {
               if (context.dataIndex === 0) {
@@ -120,15 +121,16 @@ class OneBarChart extends React.Component {
               if (context.dataIndex === 0) {
                 context.chart.chartArea.left = 50;
                 context.chart.$datalabels._datasets[0][0]._el._yScale.left = 10;
-
-                //console.log(context.chart)
+                console.log( context.chart.$datalabels._datasets[0][0].pointRadius)
+                //context.chart.$datalabels._datasets[0][2].pointRadius = [0, 0, 0, 0, 0, 8, 0];
+                // myChart1.data.datasets[0].pointRadius = [0, 0, 0, 0, 0, 8, 0];
               }
               return context.chart.data.datasets[2].labelData[
                 context.dataIndex
               ];
             },
             font: { size: 10, style: "bold" },
-            padding: { right: -10 }
+            padding: { right: -10 },
           },
           ...this.getMaxValues()
         },
@@ -139,6 +141,7 @@ class OneBarChart extends React.Component {
           fill: false,
           borderColor: "#c9606f",
           yAxisID: "y-axis-3",
+          pointRadius: [0, 0, 0, 0, 0, 8, 0],
           datalabels: {
             // color: "black",
             color: function(context) {
@@ -168,7 +171,7 @@ class OneBarChart extends React.Component {
   getChartOptions() {
     return {
       layout: {
-        padding: { top: 40, left: -3, right: 10, bottom: 0 }
+        padding: { top: 40, left: -3, right: 30, bottom: 0 }
       },
       scales: {
         xAxes: [
@@ -196,20 +199,18 @@ class OneBarChart extends React.Component {
               callback: function(label, index, labels) {
                 return label + "%";
               },
-              gridLines: { display: false }
-            }
+              
+            },gridLines: { display: false }
           },
           {
             ticks: { max: 100, min: 0, stepSize: 1, beginAtZero: true },
             display: false,
             id: "y-axis-2",
-            gridLines: { display: false }
           },
           {
             ticks: { max: 100, min: 0, stepSize: 1, beginAtZero: true },
             display: false,
             id: "y-axis-3",
-            gridLines: { display: false }
           },
           {
             stacked: true,
@@ -223,7 +224,6 @@ class OneBarChart extends React.Component {
             },
             display: false,
             id: "y-axis-4",
-            gridLines: { display: false }
           }
         ]
       },
