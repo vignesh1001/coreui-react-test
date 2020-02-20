@@ -31,7 +31,7 @@ class OneBarChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      percentageList: ["", 50, ""],
+      percentageList: ["", 60, ""],
       chartLabels: ["", "DIESEL", ""],
       minValueList: ["", "", 5000],
       minPctList: [10, 10, 10],
