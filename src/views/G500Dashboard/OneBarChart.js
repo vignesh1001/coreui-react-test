@@ -49,12 +49,9 @@ class OneBarChart extends React.Component {
   getChartData() {
     const { percentageList, chartLabels } = this.state;
     const pctVal = percentageList.find(e => e);
-    const barBgColor =
-      pctVal < 10 || pctVal > 95
-        ? ["#f00", '#f00"', "#f00"]
-        : pctVal < 20
-        ? ["#f0f009", '#f0f009"', "#f0f009"]
-        : ["#45a973", '#45a973"', "#45a973"];
+    const barBgColor = percentageList.map(pctVal =>
+      pctVal < 10 || pctVal > 95 ? "#f00" : pctVal < 20 ? "#f0f009" : "#45a973"
+    );
     const chartFontColor = pctVal < 20 ? "black" : "white";
     return {
       labels: chartLabels,
@@ -69,12 +66,11 @@ class OneBarChart extends React.Component {
           yAxisID: "y-axis-1",
           stack: "Stack 1",
           datalabels: {
-            color: chartFontColor,
-            formatter: function(value, context) {
-              return (
-                context.chart.data.datasets[0].data[context.dataIndex] + "%"
-              );
-            }
+            color: context =>
+              context.dataset.data[context.dataIndex] < 20 ? "black" : "white",
+            formatter: (value, context) =>
+              context.chart.data.datasets[0].data[context.dataIndex] &&
+              context.chart.data.datasets[0].data[context.dataIndex] + "%"
           }
         },
         {
@@ -89,11 +85,8 @@ class OneBarChart extends React.Component {
           datalabels: {
             color: "black",
             anchor: "start",
-            formatter: function(value, context) {
-              return context.chart.data.datasets[1].labelData[
-                context.dataIndex
-              ];
-            },
+            formatter: (value, context) =>
+              context.chart.data.datasets[1].labelData[context.dataIndex],
             font: { size: 12, style: "bold" },
             align: "end",
             anchor: "end",
@@ -108,13 +101,7 @@ class OneBarChart extends React.Component {
           yAxisID: "y-axis-2",
           pointRadius: [0, 0, 0, 0, 0, 8, 0],
           datalabels: {
-            color: function(context) {
-              if (context.dataIndex === 0) {
-                return "blue";
-              } else {
-                return "black";
-              }
-            },
+            color: context => (context.dataIndex === 0 ? "blue" : "black"),
             align: "top",
             anchor: "bottom",
             formatter: function(value, context) {
@@ -145,23 +132,11 @@ class OneBarChart extends React.Component {
           yAxisID: "y-axis-3",
           pointRadius: [0, 0, 0, 0, 0, 8, 0],
           datalabels: {
-            // color: "black",
-            color: function(context) {
-              //  var index = context.dataIndex;
-              //  var value = context.dataset.data[index];
-              if (context.dataIndex === 0) {
-                return "blue";
-              } else {
-                return "black";
-              }
-            },
+            color: context => (context.dataIndex === 0 ? "blue" : "black"),
             align: "top",
             anchor: "bottom",
-            formatter: function(value, context) {
-              return context.chart.data.datasets[3].labelData[
-                context.dataIndex
-              ];
-            },
+            formatter: (value, context) =>
+              context.chart.data.datasets[3].labelData[context.dataIndex],
             font: { size: 10, style: "bold" },
             padding: { right: 10, top: 0 }
           },
@@ -198,9 +173,7 @@ class OneBarChart extends React.Component {
               max: 100,
               stepSize: 20,
               beginAtZero: true,
-              callback: function(label, index, labels) {
-                return label + "%";
-              }
+              callback: (label, index, labels) => label + "%"
             },
             gridLines: { display: false }
           },
@@ -220,9 +193,7 @@ class OneBarChart extends React.Component {
               max: 200,
               stepSize: 20,
               beginAtZero: true,
-              callback: function(label, index, labels) {
-                return "";
-              }
+              callback: (label, index, labels) => ''
             },
             display: false,
             id: "y-axis-4"
