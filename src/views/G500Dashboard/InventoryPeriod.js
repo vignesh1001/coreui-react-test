@@ -9,53 +9,8 @@ class InventoryPeriod extends React.Component {
     super(props);
     this.myRef = React.createRef();
     this.state = {
-      barData: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July"
-        ],
-        datasets: [
-          {
-            label: "Sales",
-            type: "line",
-            data: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
-            fill: false,
-            borderColor: "#EC932F",
-            backgroundColor: "#EC932F",
-            pointBorderColor: "#EC932F",
-            pointBackgroundColor: "#EC932F",
-            pointHoverBackgroundColor: "#EC932F",
-            pointHoverBorderColor: "#EC932F",
-            yAxisID: "y-axis-2"
-          },
-          {
-            type: "bar",
-            label: "Visitor",
-            data: [20000, 25000, 42552, 19432, 41535, 28953,34354],
-            fill: false,
-            backgroundColor: "#0039b0",
-            borderColor: "#71B37C",
-            hoverBackgroundColor: "#",
-            hoverBorderColor: "#71B37C",
-            yAxisID: "y-axis-1",
-            datalabels: {
-              color: "black",
-              anchor: "start",
-              formatter: (value, context) =>
-                this.numberWithCommas(context.chart.data.datasets[1].data[context.dataIndex]),
-              font: { size: 12, style: "bold" },
-              align: "end",
-              anchor: "end",
-              padding: { right: 30, top: -10 }
-            }
-          }
-        ]
-      }
+      barData: {},
+      chartOptions: {}
     };
     this.onLineChanged = this.onLineChanged.bind(this);
   }
@@ -66,7 +21,6 @@ class InventoryPeriod extends React.Component {
 
   componentDidMount() {
     let languagebr = localStorage.getItem("language");
-    this.setState({ language: languagebr });
     // if (languagebr === "en") {
     //   this.setState({
     //     doughnut:this.state.doughnut_en
@@ -77,6 +31,11 @@ class InventoryPeriod extends React.Component {
     //     doughnut:this.state.doughnut_es
     //   });
     // }
+    this.setState({
+      barData: this.getBarData(),
+      chartOptions: this.getChartOptions(),
+      language: languagebr
+    });
   }
   onLineChanged() {
     this.myRef.current.chartInstance.getDatasetMeta(
@@ -84,8 +43,67 @@ class InventoryPeriod extends React.Component {
     ).hidden = !this.myRef.current.chartInstance.getDatasetMeta(0).hidden;
     this.myRef.current.chartInstance.update();
   }
+  getBarData() {
+    const options = {
+      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      datasets: [
+        {
+          label: "Sales",
+          type: "line",
+          data: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
+          fill: false,
+          borderColor: "#EC932F",
+          backgroundColor: "#EC932F",
+          pointBorderColor: "#EC932F",
+          pointBackgroundColor: "#EC932F",
+          pointHoverBackgroundColor: "#EC932F",
+          pointHoverBorderColor: "#EC932F",
+          yAxisID: "y-axis-2",
+          datalabels: {
+            color: "black",
+            anchor: "start",
+            formatter: (value, context) =>
+              this.numberWithCommas(
+                context.chart.data.datasets[1].data[context.dataIndex]
+              ),
+            font: { size: 12 },
+            align: "end",
+            anchor: "end",
+            padding: { right: 30, top: -10 }
+          }
+        },
+        {
+          type: "bar",
+          label: "Visitor",
+          data: [20000, 25000, 42552, 19432, 41535, 28953, 34354],
+          fill: false,
+          backgroundColor: "#0039b0",
+          borderColor: "#71B37C",
+          hoverBackgroundColor: "#032a75",
+          hoverBorderColor: "#71B37C",
+          yAxisID: "y-axis-1",
+          datalabels: {
+            color: "black",
+            anchor: "start",
+            formatter: (value, context) =>
+              this.numberWithCommas(
+                context.chart.data.datasets[1].data[context.dataIndex]
+              ),
+            font: { size: 12, style: "bold" },
+            align: "end",
+            anchor: "end",
+            padding: { right: 30, top: -10 }
+          }
+        }
+      ]
+    };
+    return options;
+  }
   getChartOptions() {
     return {
+      layout: {
+        padding: { top: 30, left: -3, bottom: 0 }
+      },
       maintainAspectRatio: false,
       responsive: true,
       tooltips: {
@@ -103,8 +121,7 @@ class InventoryPeriod extends React.Component {
           boxWidth: 10
         }
       },
-      plugins: {
-      },
+      plugins: {},
       scales: {
         xAxes: [
           {
@@ -116,7 +133,7 @@ class InventoryPeriod extends React.Component {
             },
             gridLines: {
               display: false
-            },
+            }
           }
         ],
         yAxes: [
@@ -124,13 +141,11 @@ class InventoryPeriod extends React.Component {
             type: "linear",
             display: true,
             position: "left",
-            id: "y-axis-1",
+            id: "y-axis-1", // bar chart
             gridLines: {
-              display: false
+              borderDash: [8, 4]
             },
-            label: {
-              show: false
-            }
+            ticks: { max: 50000, min: 0, stepSize: 10000, beginAtZero: true }
           },
           {
             type: "linear",
@@ -139,9 +154,6 @@ class InventoryPeriod extends React.Component {
             id: "y-axis-2",
             gridLines: {
               display: false
-            },
-            label: {
-              show: false
             }
           }
         ]
@@ -151,7 +163,7 @@ class InventoryPeriod extends React.Component {
   //  const toggle = document.getElementById("toggleSales");
   //  toggle.addEventListener("click", toggleSales, false);
   render() {
-    const { barData } = this.state;
+    const { barData, chartOptions } = this.state;
     console.log("my ref", this.myRef.current);
     return (
       <div className="col-xl-8 col-lg-6 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
@@ -169,7 +181,7 @@ class InventoryPeriod extends React.Component {
                       data={barData}
                       width={100}
                       height={50}
-                      options={this.getChartOptions()}
+                      options={chartOptions}
                     />
                   </div>
                 </div>
