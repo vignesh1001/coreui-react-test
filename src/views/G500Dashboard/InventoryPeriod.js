@@ -10,7 +10,10 @@ class InventoryPeriod extends React.Component {
     this.myRef = React.createRef();
     this.state = {
       barData: {},
-      chartOptions: {}
+      chartOptions: {},
+      chartLabels: ["January", "February", "March", "April", "May", "June", "July"],
+      lineChartData: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
+      barChartData: [20000, 25000, 42552, 19432, 41535, 28953, 34354],
     };
     this.onLineChanged = this.onLineChanged.bind(this);
   }
@@ -44,13 +47,14 @@ class InventoryPeriod extends React.Component {
     this.myRef.current.chartInstance.update();
   }
   getBarData() {
+    const {chartLabels, lineChartData,barChartData}=this.state;
     const options = {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      labels: chartLabels,
       datasets: [
         {
           label: "Sales",
           type: "line",
-          data: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
+          data: lineChartData,
           fill: false,
           borderColor: "#EC932F",
           backgroundColor: "#EC932F",
@@ -64,18 +68,18 @@ class InventoryPeriod extends React.Component {
             anchor: "start",
             formatter: (value, context) =>
               this.numberWithCommas(
-                context.chart.data.datasets[1].data[context.dataIndex]
+                context.chart.data.datasets[0].data[context.dataIndex]
               ),
             font: { size: 12 },
             align: "end",
             anchor: "end",
-            padding: { right: 30, top: -10 }
+            padding: { right: 30, top: -6 }
           }
         },
         {
           type: "bar",
           label: "Visitor",
-          data: [20000, 25000, 42552, 19432, 41535, 28953, 34354],
+          data: barChartData,
           fill: false,
           backgroundColor: "#0039b0",
           borderColor: "#71B37C",
