@@ -1,5 +1,14 @@
 import React from "react";
-import { Row, Container, Col, Button } from "reactstrap";
+import {
+  Row,
+  Container,
+  Col,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle
+} from "reactstrap";
 import "./InventoryPeriod.scss";
 import { Bar, Chart } from "react-chartjs-2";
 import "chartjs-plugin-datalabels";
@@ -9,11 +18,21 @@ class InventoryPeriod extends React.Component {
     super(props);
     this.myRef = React.createRef();
     this.state = {
+      isFuelDDOpen: false,
+      fuelDDValue: "",
       barData: {},
       chartOptions: {},
-      chartLabels: ["January", "February", "March", "April", "May", "June", "July"],
+      chartLabels: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July"
+      ],
       lineChartData: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
-      barChartData: [20000, 25000, 42552, 19432, 41535, 28953, 34354],
+      barChartData: [20000, 25000, 42552, 19432, 41535, 28953, 34354]
     };
     this.onLineChanged = this.onLineChanged.bind(this);
   }
@@ -40,6 +59,29 @@ class InventoryPeriod extends React.Component {
       language: languagebr
     });
   }
+  componentDidUpdate(prevProps, prevState) {
+    console.log("prevState", prevState, this.state);
+    const { lineChartData, barChartData } = prevState;
+    const {
+      lineChartData: newStateLineChartData,
+      barChartData: newStateBarChartData
+    } = this.state;
+    console.log(
+      lineChartData.length,
+      newStateLineChartData.length,
+      barChartData.length,
+      newStateBarChartData.length
+    );
+    if (
+      lineChartData.length !== newStateLineChartData.length ||
+      barChartData.length !== newStateBarChartData.length
+    ) {
+      this.setState({
+      barData: this.getBarData(),
+      chartOptions: this.getChartOptions()
+    });
+    }
+  }
   onLineChanged() {
     this.myRef.current.chartInstance.getDatasetMeta(
       0
@@ -47,7 +89,7 @@ class InventoryPeriod extends React.Component {
     this.myRef.current.chartInstance.update();
   }
   getBarData() {
-    const {chartLabels, lineChartData,barChartData}=this.state;
+    const { chartLabels, lineChartData, barChartData } = this.state;
     const options = {
       labels: chartLabels,
       datasets: [
@@ -164,16 +206,85 @@ class InventoryPeriod extends React.Component {
       }
     };
   }
+  handleChange(e, fieldName) {
+    this.setState({ [fieldName]: e.currentTarget.textContent });
+    console.log(e.currentTarget.textContent);
+    if ("Diesel" === e.currentTarget.textContent) {
+      this.setState({
+        chartLabels: ["1", "2", "3", "4", "5", "6", "7"],
+        lineChartData: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
+        barChartData: [20000, 25000, 42552, 19432, 41535, 28953, 34354]
+      });
+    } else {
+      this.setState({
+        chartLabels: ["1", "2", "3", "4", "5", "6", "7",'8','9','10','11','12','13','14','15'],
+        lineChartData: [
+          20004,
+          53235,
+          35646,
+          42123,
+          14321,
+          13532,
+          34224,
+          26535,
+          35363,
+          28335,
+          23084,
+          49853,
+          25784,
+          28434,
+          35363
+        ],
+        barChartData: [
+          20004,
+          53235,
+          35646,
+          42123,
+          14321,
+          13532,
+          34224,
+          26535,
+          35363,
+          28335,
+          23084,
+          49853,
+          25784,
+          28434,
+          35363
+        ]
+      });
+    }
+  }
   //  const toggle = document.getElementById("toggleSales");
   //  toggle.addEventListener("click", toggleSales, false);
   render() {
-    const { barData, chartOptions } = this.state;
-    console.log("my ref", this.myRef.current);
+    const { barData, chartOptions, isFuelDDOpen, fuelDDValue } = this.state;
     return (
       <div className="col-xl-8 col-lg-6 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
         <Container className="inventory-period">
           <Container>
             <Button onClick={this.onLineChanged} />
+            <Dropdown
+              className="float-right pr-10"
+              isOpen={isFuelDDOpen}
+              toggle={() => this.setState({ isFuelDDOpen: !isFuelDDOpen })}
+            >
+              <DropdownToggle caret className="week-dd-btn">
+                {fuelDDValue}
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>
+                  <div onClick={e => this.handleChange(e, "fuelDDValue")}>
+                    Diesel
+                  </div>
+                </DropdownItem>
+                <DropdownItem>
+                  <div onClick={e => this.handleChange(e, "fuelDDValue")}>
+                    Petrol
+                  </div>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </Container>
           <Container className="inventory-period__body p-0">
             <Row className="m-0">
