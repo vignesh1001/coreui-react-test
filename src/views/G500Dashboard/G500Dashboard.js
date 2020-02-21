@@ -5,6 +5,7 @@ import SupplierAnalysis from "./SupplierAnalysis";
 import TotalRevenue from "./TotalRevenue";
 import BarChart from './BarChart';
 import OneBarChart from './OneBarChart';
+import InventoryPeriod from './InventoryPeriod';
 import './Alerts.scss';
 
 class G500Dashboard extends React.Component {
@@ -37,6 +38,7 @@ class G500Dashboard extends React.Component {
          <Performance />
          <TotalRevenue />
          */}
+         <InventoryPeriod /> 
         <OneBarChart />
       </div>
     )
