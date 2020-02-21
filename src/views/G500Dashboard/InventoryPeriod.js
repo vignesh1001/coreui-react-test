@@ -70,28 +70,8 @@ class InventoryPeriod extends React.Component {
     ).hidden = !this.myRef.current.chartInstance.getDatasetMeta(0).hidden;
     this.myRef.current.chartInstance.update();
   }
-  //  const toggle = document.getElementById("toggleSales");
-  //  toggle.addEventListener("click", toggleSales, false);
-  render() {
-    const { barData } = this.state;
-    console.log("my ref", this.myRef.current);
-    return (
-      <div className="col-xl-8 col-lg-6 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
-        <Container className="inventory-period">
-          <Container>
-            <Button onClick={this.onLineChanged} />
-          </Container>
-          <Container className="inventory-period__body p-0">
-            <Row className="m-0">
-              <Col xs="12" sm="12" md="12" className="p-0">
-                <div className="inventory-period__body-chart">
-                  <div className="chart-wrapper">
-                    <Bar
-                      ref={this.myRef}
-                      data={barData}
-                      width={100}
-                      height={50}
-                      options={{
+  getChartOptions() {
+    return ({
                         maintainAspectRatio: false,
                         responsive: true,
                         tooltips: {
@@ -153,7 +133,30 @@ class InventoryPeriod extends React.Component {
                             }
                           ]
                         }
-                      }}
+                      });
+  }
+  //  const toggle = document.getElementById("toggleSales");
+  //  toggle.addEventListener("click", toggleSales, false);
+  render() {
+    const { barData } = this.state;
+    console.log("my ref", this.myRef.current);
+    return (
+      <div className="col-xl-8 col-lg-6 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
+        <Container className="inventory-period">
+          <Container>
+            <Button onClick={this.onLineChanged} />
+          </Container>
+          <Container className="inventory-period__body p-0">
+            <Row className="m-0">
+              <Col xs="12" sm="12" md="12" className="p-0">
+                <div className="inventory-period__body-chart">
+                  <div className="chart-wrapper">
+                    <Bar
+                      ref={this.myRef}
+                      data={barData}
+                      width={100}
+                      height={50}
+                      options={t}
                     />
                   </div>
                 </div>
