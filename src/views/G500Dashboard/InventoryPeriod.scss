@@ -1,0 +1,28 @@
+.inventory-period {
+    padding: 10px;
+    -ms-border-radius: 6px;
+    -o-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -ms-box-shadow: 0px 3px 6px #00000029;
+    -o-box-shadow: 0px 3px 6px #00000029;
+    -webkit-box-shadow: 0px 3px 6px #00000029;
+    -moz-box-shadow: 0px 3px 6px #00000029;
+    background: #F7F7F7 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 6px;
+    opacity: 1;
+
+    &__body {
+        
+        &-chart {
+            background: #FFFFFF 0% 0% no-repeat padding-box;
+            box-shadow: 0px 3px 6px #00000029;
+            border-radius: 8px;
+            opacity: 1;
+            .chart-wrapper{
+                height: 250px;
+            }
+        }
+    }
+}
