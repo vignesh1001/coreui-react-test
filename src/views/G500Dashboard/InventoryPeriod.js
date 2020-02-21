@@ -71,69 +71,69 @@ class InventoryPeriod extends React.Component {
     this.myRef.current.chartInstance.update();
   }
   getChartOptions() {
-    return ({
-                        maintainAspectRatio: false,
-                        responsive: true,
-                        tooltips: {
-                          mode: "label"
-                        },
-                        elements: {
-                          line: {
-                            fill: false
-                          }
-                        },
-                        legend: {
-                          display: true,
-                          position: "top",
-                          labels: {
-                            boxWidth: 10
-                          }
-                        },
-                        plugins: {
-                          labels: {
-                            render: "value"
-                          }
-                        },
-                        scales: {
-                          xAxes: [
-                            {
-                              display: true,
-                              gridLines: {
-                                display: false
-                              },
-                              label: {
-                                show: false
-                              }
-                            }
-                          ],
-                          yAxes: [
-                            {
-                              type: "linear",
-                              display: true,
-                              position: "left",
-                              id: "y-axis-1",
-                              gridLines: {
-                                display: false
-                              },
-                              label: {
-                                show: false
-                              }
-                            },
-                            {
-                              type: "linear",
-                              display: false,
-                              position: "right",
-                              id: "y-axis-2",
-                              gridLines: {
-                                display: false
-                              },
-                              label: {
-                                show: false
-                              }
-                            }
-                          ]
-                        }
-                      });
+    return {
+      maintainAspectRatio: false,
+      responsive: true,
+      tooltips: {
+        mode: "label"
+      },
+      elements: {
+        line: {
+          fill: false
+        }
+      },
+      legend: {
+        display: true,
+        position: "top",
+        labels: {
+          boxWidth: 10
+        }
+      },
+      plugins: {
+        labels: {
+          render: "value"
+        }
+      },
+      scales: {
+        xAxes: [
+          {
+            display: true,
+            gridLines: {
+              display: false
+            },
+            label: {
+              show: false
+            }
+          }
+        ],
+        yAxes: [
+          {
+            type: "linear",
+            display: true,
+            position: "left",
+            id: "y-axis-1",
+            gridLines: {
+              display: false
+            },
+            label: {
+              show: false
+            }
+          },
+          {
+            type: "linear",
+            display: false,
+            position: "right",
+            id: "y-axis-2",
+            gridLines: {
+              display: false
+            },
+            label: {
+              show: false
+            }
+          }
+        ]
+      }
+    };
   }
   //  const toggle = document.getElementById("toggleSales");
   //  toggle.addEventListener("click", toggleSales, false);
@@ -156,7 +156,7 @@ class InventoryPeriod extends React.Component {
                       data={barData}
                       width={100}
                       height={50}
-                      options={t}
+                      options={this.getChartOptions()}
                     />
                   </div>
                 </div>
