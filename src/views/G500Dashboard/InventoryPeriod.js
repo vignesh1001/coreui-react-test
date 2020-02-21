@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Container, Col, Button } from "reactstrap";
 import "./InventoryPeriod.scss";
 import { Bar, Chart } from "react-chartjs-2";
-import "chartjs-plugin-labels";
+import "chartjs-plugin-datalabels";
 
 class InventoryPeriod extends React.Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class InventoryPeriod extends React.Component {
           {
             label: "Sales",
             type: "line",
-            data: [51, 65, 40, 49, 60, 37, 40],
+            data: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
             fill: false,
             borderColor: "#EC932F",
             backgroundColor: "#EC932F",
@@ -36,18 +36,32 @@ class InventoryPeriod extends React.Component {
           {
             type: "bar",
             label: "Visitor",
-            data: [200, 185, 590, 621, 250, 400, 95],
+            data: [20000, 25000, 42552, 19432, 41535, 28953,34354],
             fill: false,
-            backgroundColor: "#71B37C",
+            backgroundColor: "#0039b0",
             borderColor: "#71B37C",
-            hoverBackgroundColor: "#71B37C",
+            hoverBackgroundColor: "#",
             hoverBorderColor: "#71B37C",
-            yAxisID: "y-axis-1"
+            yAxisID: "y-axis-1",
+            datalabels: {
+              color: "black",
+              anchor: "start",
+              formatter: (value, context) =>
+                this.numberWithCommas(context.chart.data.datasets[1].data[context.dataIndex]),
+              font: { size: 12, style: "bold" },
+              align: "end",
+              anchor: "end",
+              padding: { right: 30, top: -10 }
+            }
           }
         ]
       }
     };
     this.onLineChanged = this.onLineChanged.bind(this);
+  }
+
+  numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   componentDidMount() {
@@ -83,27 +97,26 @@ class InventoryPeriod extends React.Component {
         }
       },
       legend: {
-        display: true,
+        display: false,
         position: "top",
         labels: {
           boxWidth: 10
         }
       },
       plugins: {
-        labels: {
-          render: "value"
-        }
       },
       scales: {
         xAxes: [
           {
-            display: true,
+            ticks: {
+              fontColor: "#000",
+              fontStyle: "bold",
+              fontFamily: "Roboto",
+              fontSize: 12
+            },
             gridLines: {
               display: false
             },
-            label: {
-              show: false
-            }
           }
         ],
         yAxes: [
