@@ -269,14 +269,14 @@ class InventoryPeriod extends React.Component {
     } else if (periodType.value === "3") {
       if (period.value === "2") tarDate = getMonday(tarDate.getTime());
       if (period.value === "3") tarDate.setDate(1);
-      if (period.value === "4"){
+      if (period.value === "4") {
         tarDate.setDate(1);
-        tarDate.setMonth()
+        tarDate.setMonth(0);
       }
     }
     filterList = responseJSON
-        .filter(item => item.o_RecordDate.getTime() >= tarDate.getTime())
-        .sort((a, b)=> new Date(a.o_RecordDate) - new Date(b.o_RecordDate));
+      .filter(item => item.o_RecordDate.getTime() >= tarDate.getTime())
+      .sort((a, b) => new Date(a.o_RecordDate) - new Date(b.o_RecordDate));
     this.setState({
       chartLabels: filterList.map(e => e.Period),
       lineChartData: filterList.map(e => e.StartingInventory),
