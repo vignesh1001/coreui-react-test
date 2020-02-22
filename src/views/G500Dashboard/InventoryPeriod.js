@@ -26,11 +26,25 @@ class InventoryPeriod extends React.Component {
       isShowLineChart: true,
       isFuelDDOpen: false,
       fuelDDValue: "",
-      periodDD:{
+      periodType: {
+        list: [
+          { key: 1, value: "Last" },
+          { key: 2, value: "Prev" },
+          { key: 3, value: "Next" }
+        ],
         isOpen: false,
-        value:'',
+        value: ""
       },
-      
+      periodDay: "",
+      period: {
+        list: [
+          { key: 1, value: "Days" },
+          { key: 2, value: "Weeks" },
+          { key: 3, value: "Years" }
+        ],
+        isOpen: false,
+        value: ""
+      },
       barData: {},
       chartOptions: {},
       chartLabels: [
@@ -286,24 +300,39 @@ class InventoryPeriod extends React.Component {
   }
   //  const toggle = document.getElementById("toggleSales");
   //  toggle.addEventListener("click", toggleSales, false);
-  renderDropdown() {
-    return (<Dropdown
-      className="float-left pr-10"
-      isOpen={isFuelDDOpen}
-      toggle={() => this.setState({ isFuelDDOpen: !isFuelDDOpen })}
-    >
-      <DropdownToggle caret className="week-dd-btn">
-        {fuelDDValue}
-      </DropdownToggle>
-      <DropdownMenu>
-        <DropdownItem>
-          <div onClick={e => this.handleChange(e, "fuelDDValue")}>Diesel</div>
-        </DropdownItem>
-        <DropdownItem>
-          <div onClick={e => this.handleChange(e, "fuelDDValue")}>Petrol</div>
-        </DropdownItem>
-      </DropdownMenu>
-    </Dropdown>);
+  renderDropdown(stateName) {
+    const { list, isOpen, value } = this.state[stateName];
+    const toggleDropdown = () => {
+      this.setState({
+        [stateName]: { ...this.state[stateName], isOpen: !isOpen }
+      });
+    };
+    const onDropdownChange = (e) => {
+      console.log()
+      this.setState({
+        [stateName]: { ...this.state[stateName], isOpen: !isOpen }
+      });
+    }
+    return (
+      <Dropdown
+        className="float-left pr-10"
+        isOpen={isOpen}
+        toggle={toggleDropdown}
+      >
+        <DropdownToggle caret className="week-dd-btn">
+          {fuelDDValue}
+        </DropdownToggle>
+        <DropdownMenu>
+          {list.map((item,i) => (
+            <DropdownItem>
+              <div onClick={onDropdownChange} value={item.key} key={`key-${stateName+i}`}>
+                {item.value}
+              </div>
+            </DropdownItem>
+          ))}
+        </DropdownMenu>
+      </Dropdown>
+    );
   }
   render() {
     const {
