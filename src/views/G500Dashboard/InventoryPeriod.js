@@ -28,9 +28,9 @@ class InventoryPeriod extends React.Component {
       fuelDDValue: "",
       periodType: {
         list: [
-          { key: 1, value: "Last" },
-          { key: 2, value: "Prev" },
-          { key: 3, value: "Next" }
+          { key: "1", value: "Last" },
+          { key: "2", value: "Prev" },
+          { key: "3", value: "Next" }
         ],
         isOpen: false,
         value: ""
@@ -38,9 +38,9 @@ class InventoryPeriod extends React.Component {
       periodDay: "",
       period: {
         list: [
-          { key: 1, value: "Days" },
-          { key: 2, value: "Weeks" },
-          { key: 3, value: "Years" }
+          { key: "1", value: "Days" },
+          { key: "2", value: "Weeks" },
+          { key: "3", value: "Years" }
         ],
         isOpen: false,
         value: ""
@@ -301,18 +301,22 @@ class InventoryPeriod extends React.Component {
   //  const toggle = document.getElementById("toggleSales");
   //  toggle.addEventListener("click", toggleSales, false);
   renderDropdown(stateName) {
-    const { list, isOpen, value } = this.state[stateName];
+    const dropdownObject = this.state[stateName];
+    const { list, isOpen, value } = dropdownObject;
+    const selectedValue = value && list.find(e => e.key === value).value;
     const toggleDropdown = () => {
+      dropdownObject.isOpen = !isOpen; 
       this.setState({
-        [stateName]: { ...this.state[stateName], isOpen: !isOpen }
+        [stateName]: dropdownObject
       });
     };
-    const onDropdownChange = (e) => {
-      console.log()
+    const onDropdownChange = e => {
+      dropdownObject.isOpen = !isOpen;
+      dropdownObject.value = e.target.getAttribute("value");
       this.setState({
-        [stateName]: { ...this.state[stateName], isOpen: !isOpen }
+        [stateName]: dropdownObject
       });
-    }
+    };
     return (
       <Dropdown
         className="float-left pr-10"
@@ -320,12 +324,16 @@ class InventoryPeriod extends React.Component {
         toggle={toggleDropdown}
       >
         <DropdownToggle caret className="week-dd-btn">
-          {fuelDDValue}
+          {selectedValue}
         </DropdownToggle>
         <DropdownMenu>
-          {list.map((item,i) => (
+          {list.map((item, i) => (
             <DropdownItem>
-              <div onClick={onDropdownChange} value={item.key} key={`key-${stateName+i}`}>
+              <div
+                onClick={onDropdownChange}
+                value={item.key}
+                key={`key-${stateName + i}`}
+              >
                 {item.value}
               </div>
             </DropdownItem>
@@ -350,25 +358,18 @@ class InventoryPeriod extends React.Component {
               <Col xs="8" sm="8" md="8" className="p-0">
                 <Form inline>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label for="exampleEmail" className="mr-sm-2">
-                      Email
-                    </Label>
+                    {this.renderDropdown("periodType")}
+                  </FormGroup>
+                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     <Input
-                      name="email"
-                      id="exampleEmail"
-                      placeholder="something@idk.cool"
+                      style={{ width: 70 }}
+                      name="days"
+                      id="period_days"
+                      placeholder="Days"
                     />
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label for="examplePassword" className="mr-sm-2">
-                      Password
-                    </Label>
-                    <Input
-                      type="password"
-                      name="password"
-                      id="examplePassword"
-                      placeholder="don't tell!"
-                    />
+                    {this.renderDropdown("period")}
                   </FormGroup>
                   <Button>Go</Button>
                 </Form>
