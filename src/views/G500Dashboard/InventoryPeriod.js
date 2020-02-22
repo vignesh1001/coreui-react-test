@@ -8,7 +8,11 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  CustomInput
+  CustomInput,
+  Form,
+  Label,
+  Input,
+  FormGroup
 } from "reactstrap";
 import "./InventoryPeriod.scss";
 import { Bar, Chart } from "react-chartjs-2";
@@ -22,6 +26,11 @@ class InventoryPeriod extends React.Component {
       isShowLineChart: true,
       isFuelDDOpen: false,
       fuelDDValue: "",
+      periodDD:{
+        isOpen: false,
+        value:'',
+      },
+      
       barData: {},
       chartOptions: {},
       chartLabels: [
@@ -85,12 +94,12 @@ class InventoryPeriod extends React.Component {
     }
   }
   onLineChanged() {
-    const {isShowLineChart}=this.state;
+    const { isShowLineChart } = this.state;
     this.myRef.current.chartInstance.getDatasetMeta(
       0
     ).hidden = !this.myRef.current.chartInstance.getDatasetMeta(0).hidden;
     this.myRef.current.chartInstance.update();
-    this.setState({isShowLineChart:!isShowLineChart});
+    this.setState({ isShowLineChart: !isShowLineChart });
   }
   getBarData() {
     const { chartLabels, lineChartData, barChartData } = this.state;
@@ -277,35 +286,63 @@ class InventoryPeriod extends React.Component {
   }
   //  const toggle = document.getElementById("toggleSales");
   //  toggle.addEventListener("click", toggleSales, false);
+  renderDropdown() {
+    return (<Dropdown
+      className="float-left pr-10"
+      isOpen={isFuelDDOpen}
+      toggle={() => this.setState({ isFuelDDOpen: !isFuelDDOpen })}
+    >
+      <DropdownToggle caret className="week-dd-btn">
+        {fuelDDValue}
+      </DropdownToggle>
+      <DropdownMenu>
+        <DropdownItem>
+          <div onClick={e => this.handleChange(e, "fuelDDValue")}>Diesel</div>
+        </DropdownItem>
+        <DropdownItem>
+          <div onClick={e => this.handleChange(e, "fuelDDValue")}>Petrol</div>
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>);
+  }
   render() {
-    const { barData, chartOptions, isFuelDDOpen, fuelDDValue, isShowLineChart } = this.state;
+    const {
+      barData,
+      chartOptions,
+      isFuelDDOpen,
+      fuelDDValue,
+      isShowLineChart
+    } = this.state;
     return (
       <div className="col-xl-12 col-lg-12 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
         <Container className="inventory-period">
           <Container>
             <Row xs="2" sm="2" md="2">
               <Col xs="8" sm="8" md="8" className="p-0">
-                <Dropdown
-                  className="float-left pr-10"
-                  isOpen={isFuelDDOpen}
-                  toggle={() => this.setState({ isFuelDDOpen: !isFuelDDOpen })}
-                >
-                  <DropdownToggle caret className="week-dd-btn">
-                    {fuelDDValue}
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem>
-                      <div onClick={e => this.handleChange(e, "fuelDDValue")}>
-                        Diesel
-                      </div>
-                    </DropdownItem>
-                    <DropdownItem>
-                      <div onClick={e => this.handleChange(e, "fuelDDValue")}>
-                        Petrol
-                      </div>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                <Form inline>
+                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="exampleEmail" className="mr-sm-2">
+                      Email
+                    </Label>
+                    <Input
+                      name="email"
+                      id="exampleEmail"
+                      placeholder="something@idk.cool"
+                    />
+                  </FormGroup>
+                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="examplePassword" className="mr-sm-2">
+                      Password
+                    </Label>
+                    <Input
+                      type="password"
+                      name="password"
+                      id="examplePassword"
+                      placeholder="don't tell!"
+                    />
+                  </FormGroup>
+                  <Button>Go</Button>
+                </Form>
               </Col>
               <Col
                 xs="4"
@@ -317,7 +354,7 @@ class InventoryPeriod extends React.Component {
                   type="switch"
                   id="customSwitch"
                   name="customSwitch"
-                  label={`${isShowLineChart?'Show':''} Line`}
+                  label={`${isShowLineChart ? "Hide" : "Show"} Line`}
                   checked={isShowLineChart}
                   onChange={this.onLineChanged}
                 />
