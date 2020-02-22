@@ -17,7 +17,7 @@ import {
 import "./InventoryPeriod.scss";
 import { Bar, Chart } from "react-chartjs-2";
 import "chartjs-plugin-datalabels";
-
+import responseJSON from "./mockData.json";
 class InventoryPeriod extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +30,7 @@ class InventoryPeriod extends React.Component {
         list: [
           { key: "1", value: "Last" },
           { key: "2", value: "Prev" },
-          { key: "3", value: "Next" }
+          { key: "3", value: "This" }
         ],
         isOpen: false,
         value: ""
@@ -40,7 +40,8 @@ class InventoryPeriod extends React.Component {
         list: [
           { key: "1", value: "Days" },
           { key: "2", value: "Weeks" },
-          { key: "3", value: "Years" }
+          { key: "3", value: "Months" },
+          { key: "4", value: "Years" }
         ],
         isOpen: false,
         value: ""
@@ -65,7 +66,6 @@ class InventoryPeriod extends React.Component {
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
-
   componentDidMount() {
     let languagebr = localStorage.getItem("language");
     // if (languagebr === "en") {
@@ -233,70 +233,55 @@ class InventoryPeriod extends React.Component {
       }
     };
   }
-  handleChange(e, fieldName) {
-    this.setState({ [fieldName]: e.currentTarget.textContent });
-    console.log(e.currentTarget.textContent);
-    if ("Diesel" === e.currentTarget.textContent) {
-      this.setState({
-        chartLabels: ["1", "2", "3", "4", "5", "6", "7"],
-        lineChartData: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
-        barChartData: [20000, 25000, 42552, 19432, 41535, 28953, 34354]
-      });
-    } else {
-      this.setState({
-        chartLabels: [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15"
-        ],
-        lineChartData: [
-          20004,
-          53235,
-          35646,
-          42123,
-          14321,
-          13532,
-          34224,
-          26535,
-          35363,
-          28335,
-          23084,
-          49853,
-          25784,
-          28434,
-          35363
-        ],
-        barChartData: [
-          20004,
-          53235,
-          35646,
-          42123,
-          14321,
-          13532,
-          34224,
-          26535,
-          35363,
-          28335,
-          23084,
-          49853,
-          25784,
-          28434,
-          35363
-        ]
-      });
+  handleGo() {
+    const { period, periodType, periodDay } = this.state;
+    responseJSON.forEach(
+      item =>
+        (item.o_RecordDate = new Date(
+          item.RecordDate.replace("T", " ").substring(
+            0,
+            item.RecordDate.lastIndexOf(".")
+          )
+        ))
+    );
+    let filterList = [];
+    const tarDate = new Date();
+    tarDate.setHours(0);
+    tarDate.setMinutes(0);
+    tarDate.setSeconds(0);
+    tarDate.setMilliseconds(0);
+    const getMonday = d => {
+      d = new Date(d);
+      var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6 : 1);
+      d.setDate(diff);
+      return d;
+    };
+    if (periodType.value === "1" && periodDay && period.value) {
+      if (period.value === "1")
+        tarDate.setDate(tarDate.getDate() - Number(periodDay));
+      if (period.value === "2")
+        tarDate.setDate(tarDate.getDate() - Number(periodDay) * 7);
+      if (period.value === "3")
+        tarDate.setMonth(tarDate.getMonth() - Number(periodDay));
+      if (period.value === "4")
+        tarDate.setFullYear(tarDate.getFullYear() - Number(periodDay));
+    } else if (periodType.value === "3") {
+      if (period.value === "2") tarDate = getMonday(tarDate.getTime());
+      if (period.value === "3") tarDate.setDate(1);
+      if (period.value === "4"){
+        tarDate.setDate(1);
+        tarDate.setMonth()
+      }
     }
+    filterList = responseJSON
+        .filter(item => item.o_RecordDate.getTime() >= tarDate.getTime())
+        .sort((a, b)=> new Date(a.o_RecordDate) - new Date(b.o_RecordDate));
+    this.setState({
+      chartLabels: filterList.map(e => e.Period),
+      lineChartData: filterList.map(e => e.StartingInventory),
+      barChartData: filterList.map(e => e.EndingInventory)
+    });
   }
   //  const toggle = document.getElementById("toggleSales");
   //  toggle.addEventListener("click", toggleSales, false);
@@ -305,7 +290,7 @@ class InventoryPeriod extends React.Component {
     const { list, isOpen, value } = dropdownObject;
     const selectedValue = value && list.find(e => e.key === value).value;
     const toggleDropdown = () => {
-      dropdownObject.isOpen = !isOpen; 
+      dropdownObject.isOpen = !isOpen;
       this.setState({
         [stateName]: dropdownObject
       });
@@ -366,12 +351,15 @@ class InventoryPeriod extends React.Component {
                       name="days"
                       id="period_days"
                       placeholder="Days"
+                      onChange={e =>
+                        this.setState({ periodDay: e.target.value })
+                      }
                     />
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     {this.renderDropdown("period")}
                   </FormGroup>
-                  <Button>Go</Button>
+                  <Button onClick={e => this.handleGo(e)}>Go</Button>
                 </Form>
               </Col>
               <Col
@@ -384,7 +372,7 @@ class InventoryPeriod extends React.Component {
                   type="switch"
                   id="customSwitch"
                   name="customSwitch"
-                  label={`${isShowLineChart ? "Hide" : "Show"} Line`}
+                  label={`Line Chart ${isShowLineChart ? "Off" : "On"}`}
                   checked={isShowLineChart}
                   onChange={this.onLineChanged}
                 />
