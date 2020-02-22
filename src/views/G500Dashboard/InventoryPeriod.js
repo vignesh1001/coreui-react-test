@@ -343,7 +343,7 @@ class InventoryPeriod extends React.Component {
               <Col xs="8" sm="8" md="8" className="p-0">
                 <Form inline>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    {this.renderDropdown("periodType")} 
+                    {this.renderDropdown("periodType")}
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     <Input
