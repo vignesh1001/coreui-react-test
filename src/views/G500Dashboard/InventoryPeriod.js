@@ -333,7 +333,8 @@ class InventoryPeriod extends React.Component {
       chartOptions,
       isFuelDDOpen,
       fuelDDValue,
-      isShowLineChart
+      isShowLineChart,
+      periodType
     } = this.state;
     return (
       <div className="col-xl-12 col-lg-12 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
@@ -354,6 +355,8 @@ class InventoryPeriod extends React.Component {
                       onChange={e =>
                         this.setState({ periodDay: e.target.value })
                       }
+                      maxLength={3}
+                      disabled={periodType.value==='3'}
                     />
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
