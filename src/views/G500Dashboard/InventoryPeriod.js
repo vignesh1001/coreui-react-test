@@ -7,7 +7,8 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
-  DropdownToggle
+  DropdownToggle,
+  CustomInput
 } from "reactstrap";
 import "./InventoryPeriod.scss";
 import { Bar, Chart } from "react-chartjs-2";
@@ -18,6 +19,7 @@ class InventoryPeriod extends React.Component {
     super(props);
     this.myRef = React.createRef();
     this.state = {
+      isShowLineChart: true,
       isFuelDDOpen: false,
       fuelDDValue: "",
       barData: {},
@@ -77,16 +79,18 @@ class InventoryPeriod extends React.Component {
       barChartData.length !== newStateBarChartData.length
     ) {
       this.setState({
-      barData: this.getBarData(),
-      chartOptions: this.getChartOptions()
-    });
+        barData: this.getBarData(),
+        chartOptions: this.getChartOptions()
+      });
     }
   }
   onLineChanged() {
+    const {isShowLineChart}=this.state;
     this.myRef.current.chartInstance.getDatasetMeta(
       0
     ).hidden = !this.myRef.current.chartInstance.getDatasetMeta(0).hidden;
     this.myRef.current.chartInstance.update();
+    this.setState({isShowLineChart:!isShowLineChart});
   }
   getBarData() {
     const { chartLabels, lineChartData, barChartData } = this.state;
@@ -217,7 +221,23 @@ class InventoryPeriod extends React.Component {
       });
     } else {
       this.setState({
-        chartLabels: ["1", "2", "3", "4", "5", "6", "7",'8','9','10','11','12','13','14','15'],
+        chartLabels: [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15"
+        ],
         lineChartData: [
           20004,
           53235,
@@ -258,33 +278,51 @@ class InventoryPeriod extends React.Component {
   //  const toggle = document.getElementById("toggleSales");
   //  toggle.addEventListener("click", toggleSales, false);
   render() {
-    const { barData, chartOptions, isFuelDDOpen, fuelDDValue } = this.state;
+    const { barData, chartOptions, isFuelDDOpen, fuelDDValue, isShowLineChart } = this.state;
     return (
-      <div className="col-xl-8 col-lg-6 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
+      <div className="col-xl-12 col-lg-12 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
         <Container className="inventory-period">
           <Container>
-            <Button onClick={this.onLineChanged} />
-            <Dropdown
-              className="float-right pr-10"
-              isOpen={isFuelDDOpen}
-              toggle={() => this.setState({ isFuelDDOpen: !isFuelDDOpen })}
-            >
-              <DropdownToggle caret className="week-dd-btn">
-                {fuelDDValue}
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem>
-                  <div onClick={e => this.handleChange(e, "fuelDDValue")}>
-                    Diesel
-                  </div>
-                </DropdownItem>
-                <DropdownItem>
-                  <div onClick={e => this.handleChange(e, "fuelDDValue")}>
-                    Petrol
-                  </div>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <Row xs="2" sm="2" md="2">
+              <Col xs="8" sm="8" md="8" className="p-0">
+                <Dropdown
+                  className="float-left pr-10"
+                  isOpen={isFuelDDOpen}
+                  toggle={() => this.setState({ isFuelDDOpen: !isFuelDDOpen })}
+                >
+                  <DropdownToggle caret className="week-dd-btn">
+                    {fuelDDValue}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem>
+                      <div onClick={e => this.handleChange(e, "fuelDDValue")}>
+                        Diesel
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <div onClick={e => this.handleChange(e, "fuelDDValue")}>
+                        Petrol
+                      </div>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </Col>
+              <Col
+                xs="4"
+                sm="8"
+                md="8"
+                className="p-0 text-right total_revenue__title-actions"
+              >
+                <CustomInput
+                  type="switch"
+                  id="customSwitch"
+                  name="customSwitch"
+                  label={`${isShowLineChart?'Show':''} Line`}
+                  checked={isShowLineChart}
+                  onChange={this.onLineChanged}
+                />
+              </Col>
+            </Row>
           </Container>
           <Container className="inventory-period__body p-0">
             <Row className="m-0">
