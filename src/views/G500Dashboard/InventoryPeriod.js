@@ -17,20 +17,24 @@ import {
 import "./InventoryPeriod.scss";
 import { Bar, Chart } from "react-chartjs-2";
 import "chartjs-plugin-datalabels";
-import responseJSON from "./mockData.json";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 class InventoryPeriod extends React.Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate()-10);
+    const endDate = new Date();
     this.state = {
+      startDate,
+      endDate,
       isShowLineChart: true,
       isFuelDDOpen: false,
       fuelDDValue: "",
       periodType: {
-        list: [
-          { key: "1", value: "Last" },
-          { key: "2", value: "This" }
-        ],
+        list: [{ key: "1", value: "Last" }, { key: "2", value: "This" }],
         isOpen: false,
         value: "1"
       },
@@ -48,8 +52,8 @@ class InventoryPeriod extends React.Component {
       barData: {},
       chartOptions: {},
       chartLabels: [],
-      lineChartData: [ ],
-      barChartData: [],
+      lineChartData: [],
+      barChartData: []
     };
     this.onLineChanged = this.onLineChanged.bind(this);
     this.handleGo = this.handleGo.bind(this);
@@ -225,7 +229,7 @@ class InventoryPeriod extends React.Component {
     };
   }
   handleGo() {
-    const { period, periodType, periodDay } = this.state;
+    const { period, periodType, periodDay,startDate,endDate } = this.state;
     const { data } = this.props;
     data.forEach(
       item =>
@@ -236,6 +240,13 @@ class InventoryPeriod extends React.Component {
           )
         ))
     );
+    const clearTime=(iDate)=>{
+      iDate.setHours(0);
+      iDate.setMinutes(0);
+      iDate.setSeconds(0);
+      iDate.setMilliseconds(0);
+      return iDate;
+    }
     let filterList = [];
     let tarDate = new Date();
     tarDate.setHours(0);
@@ -266,8 +277,11 @@ class InventoryPeriod extends React.Component {
         tarDate.setMonth(0);
       }
     }
+    clearTime(startDate);
+    clearTime(endDate);
     filterList = data
-      .filter(item => item.o_RecordDate.getTime() >= tarDate.getTime())
+      .filter(item => item.o_RecordDate.getTime() >= startDate.getTime()
+      && item.o_RecordDate.getTime() <= endDate.getTime() )
       .sort((a, b) => new Date(a.o_RecordDate) - new Date(b.o_RecordDate));
     this.setState({
       chartLabels: filterList.map(e => e.periodo),
@@ -325,20 +339,62 @@ class InventoryPeriod extends React.Component {
       isShowLineChart,
       periodType,
       periodDay,
+      startDate,
+      endDate,
     } = this.state;
     console.log("inventory period data", this.props.data);
+    const closeDatePicker = (datepicker) => this.refs[datepicker].setOpen(false);
+    const ExampleCustomInput = ({ value, onClick }) => (
+    <button className="example-custom-input" onClick={onClick}>
+      {value}
+    </button>
+  );
     return (
       <div>
         <Container className="p-0">
           <Container>
             <Row className="mb-2">
               <Col lg="4" className="p-0">
-                <Form inline>
-                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    {this.renderDropdown("periodType")}
+                <Form inline className="inventory-period-form">
+                  <FormGroup className="col-12 mb-2 mr-sm-2 mb-sm-0">
+                    {
+                      //this.renderDropdown("periodType")
+                    }
+                    <DatePicker
+                      selected={startDate}
+                      ref="datepicker"
+                      onChange={date => this.setState({ startDate: date })}
+                      dateFormat="MMM dd yyyy"
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      maxDate={new Date()}
+                      customInput={<ExampleCustomInput />}
+                    >
+                      <div className="text-right">
+                        <button onClick={()=>closeDatePicker('datepicker')}>Close</button>
+                      </div>
+                    </DatePicker>-
+                    <DatePicker
+                      minDate={startDate || new Date()}
+                      maxDate={new Date()}
+                      selected={endDate}
+                      ref="datepicker1"
+                      onChange={date => this.setState({ endDate: date })}
+                      dateFormat="MMM dd yyyy"
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      customInput={<ExampleCustomInput />}
+                    >
+                      <div className="text-right">
+                        <button onClick={()=>closeDatePicker('datepicker1')}>Close</button>
+                      </div>
+                    </DatePicker> 
+                    { <Button onClick={e => this.handleGo(e)}>Go</Button> }
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Input
+                    {/*<Input
                       style={{ width: 70 }}
                       name="days"
                       id="period_days"
@@ -350,16 +406,18 @@ class InventoryPeriod extends React.Component {
                       maxLength={3}
                       disabled={periodType.value==='2'}
                       className="period-input"
-                    />
+                    />*/}
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    {this.renderDropdown("period")}
+                    {
+                      //this.renderDropdown("period")
+                    }
                   </FormGroup>
-                  {/* <Button onClick={e => this.handleGo(e)}>Go</Button> */}
+                  
                 </Form>
               </Col>
               <Col lg="6">
-                  <h5>INVENTARIO POR PERIODO</h5>
+                <h5>INVENTARIO POR PERIODO</h5>
               </Col>
               <Col lg="2" className="p-0 text-right">
                 <CustomInput
