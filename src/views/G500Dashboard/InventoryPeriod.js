@@ -29,13 +29,12 @@ class InventoryPeriod extends React.Component {
       periodType: {
         list: [
           { key: "1", value: "Last" },
-          { key: "2", value: "Prev" },
-          { key: "3", value: "This" }
+          { key: "2", value: "This" }
         ],
         isOpen: false,
-        value: ""
+        value: "1"
       },
-      periodDay: "",
+      periodDay: "10",
       period: {
         list: [
           { key: "1", value: "Days" },
@@ -44,30 +43,23 @@ class InventoryPeriod extends React.Component {
           { key: "4", value: "Years" }
         ],
         isOpen: false,
-        value: ""
+        value: "1"
       },
       barData: {},
       chartOptions: {},
-      chartLabels: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July"
-      ],
-      lineChartData: [40546, 30422, 10000, 42552, 19432, 49535, 28953],
-      barChartData: [20000, 25000, 42552, 19432, 41535, 28953, 34354]
+      chartLabels: [],
+      lineChartData: [ ],
+      barChartData: [],
     };
     this.onLineChanged = this.onLineChanged.bind(this);
+    this.handleGo = this.handleGo.bind(this);
   }
 
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   componentDidMount() {
-    let languagebr = localStorage.getItem("language");
+    //let languagebr = localStorage.getItem("language");
     // if (languagebr === "en") {
     //   this.setState({
     //     doughnut:this.state.doughnut_en
@@ -78,11 +70,7 @@ class InventoryPeriod extends React.Component {
     //     doughnut:this.state.doughnut_es
     //   });
     // }
-    this.setState({
-      barData: this.getBarData(),
-      chartOptions: this.getChartOptions(),
-      language: languagebr
-    });
+    this.handleGo();
   }
   componentDidUpdate(prevProps, prevState) {
     console.log("prevState", prevState, this.state);
@@ -121,16 +109,16 @@ class InventoryPeriod extends React.Component {
       labels: chartLabels,
       datasets: [
         {
-          label: "Sales",
+          label: "Tendency",
           type: "line",
           data: lineChartData,
           fill: false,
-          borderColor: "#EC932F",
-          backgroundColor: "#EC932F",
-          pointBorderColor: "#EC932F",
-          pointBackgroundColor: "#EC932F",
-          pointHoverBackgroundColor: "#EC932F",
-          pointHoverBorderColor: "#EC932F",
+          borderColor: "#E66C37",
+          backgroundColor: "#E66C37",
+          pointBorderColor: "#E66C37",
+          pointBackgroundColor: "#E66C37",
+          pointHoverBackgroundColor: "#E66C37",
+          pointHoverBorderColor: "#E66C37",
           yAxisID: "y-axis-2",
           datalabels: {
             color: "black",
@@ -142,18 +130,19 @@ class InventoryPeriod extends React.Component {
             font: { size: 12 },
             align: "end",
             anchor: "end",
-            padding: { right: 30, top: -6 }
+            padding: { right: 30, top: -6 },
+            display: false
           }
         },
         {
           type: "bar",
-          label: "Visitor",
+          label: "Period",
           data: barChartData,
           fill: false,
-          backgroundColor: "#0039b0",
-          borderColor: "#71B37C",
-          hoverBackgroundColor: "#032a75",
-          hoverBorderColor: "#71B37C",
+          backgroundColor: "#118DFF",
+          borderColor: "#118DFF",
+          hoverBackgroundColor: "#118DFF",
+          hoverBorderColor: "#118DFF",
           yAxisID: "y-axis-1",
           datalabels: {
             color: "black",
@@ -194,7 +183,9 @@ class InventoryPeriod extends React.Component {
           boxWidth: 10
         }
       },
-      plugins: {},
+      plugins: {
+        labels: false
+      },
       scales: {
         xAxes: [
           {
@@ -235,7 +226,8 @@ class InventoryPeriod extends React.Component {
   }
   handleGo() {
     const { period, periodType, periodDay } = this.state;
-    responseJSON.forEach(
+    const { data } = this.props;
+    data.forEach(
       item =>
         (item.o_RecordDate = new Date(
           item.RecordDate.replace("T", " ").substring(
@@ -245,7 +237,7 @@ class InventoryPeriod extends React.Component {
         ))
     );
     let filterList = [];
-    const tarDate = new Date();
+    let tarDate = new Date();
     tarDate.setHours(0);
     tarDate.setMinutes(0);
     tarDate.setSeconds(0);
@@ -266,7 +258,7 @@ class InventoryPeriod extends React.Component {
         tarDate.setMonth(tarDate.getMonth() - Number(periodDay));
       if (period.value === "4")
         tarDate.setFullYear(tarDate.getFullYear() - Number(periodDay));
-    } else if (periodType.value === "3") {
+    } else if (periodType.value === "2") {
       if (period.value === "2") tarDate = getMonday(tarDate.getTime());
       if (period.value === "3") tarDate.setDate(1);
       if (period.value === "4") {
@@ -274,17 +266,15 @@ class InventoryPeriod extends React.Component {
         tarDate.setMonth(0);
       }
     }
-    filterList = responseJSON
+    filterList = data
       .filter(item => item.o_RecordDate.getTime() >= tarDate.getTime())
       .sort((a, b) => new Date(a.o_RecordDate) - new Date(b.o_RecordDate));
     this.setState({
-      chartLabels: filterList.map(e => e.Period),
+      chartLabels: filterList.map(e => e.periodo),
       lineChartData: filterList.map(e => e.StartingInventory),
       barChartData: filterList.map(e => e.EndingInventory)
     });
   }
-  //  const toggle = document.getElementById("toggleSales");
-  //  toggle.addEventListener("click", toggleSales, false);
   renderDropdown(stateName) {
     const dropdownObject = this.state[stateName];
     const { list, isOpen, value } = dropdownObject;
@@ -294,6 +284,7 @@ class InventoryPeriod extends React.Component {
       this.setState({
         [stateName]: dropdownObject
       });
+      this.handleGo();
     };
     const onDropdownChange = e => {
       dropdownObject.isOpen = !isOpen;
@@ -308,7 +299,7 @@ class InventoryPeriod extends React.Component {
         isOpen={isOpen}
         toggle={toggleDropdown}
       >
-        <DropdownToggle caret className="week-dd-btn">
+        <DropdownToggle caret className="period-dd-btn">
           {selectedValue}
         </DropdownToggle>
         <DropdownMenu>
@@ -331,17 +322,17 @@ class InventoryPeriod extends React.Component {
     const {
       barData,
       chartOptions,
-      isFuelDDOpen,
-      fuelDDValue,
       isShowLineChart,
-      periodType
+      periodType,
+      periodDay,
     } = this.state;
+    console.log("inventory period data", this.props.data);
     return (
-      <div className="col-xl-12 col-lg-12 col-sm-6 col-12 mt-2 mb-2 pl-0 pr-0 pr-lg-3 pr-sm-0">
-        <Container className="inventory-period">
+      <div>
+        <Container className="p-0">
           <Container>
-            <Row xs="2" sm="2" md="2">
-              <Col xs="8" sm="8" md="8" className="p-0">
+            <Row className="mb-2">
+              <Col lg="4" className="p-0">
                 <Form inline>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     {this.renderDropdown("periodType")}
@@ -352,30 +343,30 @@ class InventoryPeriod extends React.Component {
                       name="days"
                       id="period_days"
                       placeholder="Days"
+                      value={periodDay}
                       onChange={e =>
                         this.setState({ periodDay: e.target.value })
                       }
                       maxLength={3}
-                      disabled={periodType.value==='3'}
+                      disabled={periodType.value==='2'}
+                      className="period-input"
                     />
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     {this.renderDropdown("period")}
                   </FormGroup>
-                  <Button onClick={e => this.handleGo(e)}>Go</Button>
+                  {/* <Button onClick={e => this.handleGo(e)}>Go</Button> */}
                 </Form>
               </Col>
-              <Col
-                xs="4"
-                sm="8"
-                md="8"
-                className="p-0 text-right total_revenue__title-actions"
-              >
+              <Col lg="6">
+                  <h5>INVENTARIO POR PERIODO</h5>
+              </Col>
+              <Col lg="2" className="p-0 text-right">
                 <CustomInput
                   type="switch"
                   id="customSwitch"
                   name="customSwitch"
-                  label={`Line Chart ${isShowLineChart ? "Off" : "On"}`}
+                  label={`Tendency ${isShowLineChart ? "On" : "Off"}`}
                   checked={isShowLineChart}
                   onChange={this.onLineChanged}
                 />
