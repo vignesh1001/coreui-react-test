@@ -6,6 +6,7 @@ import TotalRevenue from "./TotalRevenue";
 import BarChart from './BarChart';
 import OneBarChart from './OneBarChart';
 import InventoryPeriod from './InventoryPeriod';
+import responseJSON from "./mockData.json";
 import './Alerts.scss';
 
 class G500Dashboard extends React.Component {
@@ -38,7 +39,7 @@ class G500Dashboard extends React.Component {
          <Performance />
          <TotalRevenue />
          */}
-         <InventoryPeriod /> 
+         <InventoryPeriod data={responseJSON} /> 
         <OneBarChart />
       </div>
     )
