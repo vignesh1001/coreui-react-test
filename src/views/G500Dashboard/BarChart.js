@@ -31,11 +31,13 @@ class BarChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      percentageList: [83, 25, 26, 67, 86],
-      chartLabels: ["DIESEL", "DIESEL", "DIESEL", "REGULAR", "PREMINUM"],
-      minList: [4000,5000,11000,4000,4000],
-      maxList: [38000,47500,104500,38000,38000],
-      tangueList: [33114,12544,28531,28531,28531],
+      percentageList: ['',83, 25, 26, 67, 86,''],
+      chartLabels: ["","DIESEL", "DIESEL", "DIESEL", "REGULAR", "PREMINUM",""],
+      minValueList: ['',4000, 5000, 11000, 4000, 40000,''],
+      minPctList: [10,10, 10, 10, 10, 10,10],
+      maxValueList: [0,38000, 47500, 104500, 38000, 38000,''],
+      maxPctList: [90,90, 90, 90, 90, 90,90],
+      tangueList: ['',33114, 12544, 28531, 28531, 28531,''],
       isWeekDDOpen: false,
       weekDDValue: "This Week"
     };
@@ -46,6 +48,9 @@ class BarChart extends React.Component {
   }
   getChartData() {
     const { percentageList, chartLabels } = this.state;
+    const barBgColor = percentageList.map(pctVal =>
+      pctVal < 10 || pctVal > 95 ? "#f00" : pctVal < 20 ? "#f0f009" : "#45a973"
+    );
     return {
       labels: chartLabels,
       datasets: [
@@ -54,36 +59,30 @@ class BarChart extends React.Component {
           label: "1",
           data: percentageList,
           borderWidth: 1,
-          backgroundColor: "#45a973",
+          backgroundColor: barBgColor,
           pointBorderWidth: 5,
           yAxisID: "y-axis-1",
           stack: "Stack 1",
           datalabels: {
-            color: "white",
-            formatter: function(value, context) {
-              return (
-                context.chart.data.datasets[0].data[context.dataIndex] + "%"
-              );
-            }
+            color: context =>
+              context.dataset.data[context.dataIndex] < 20 ? "black" : "white",
+            formatter: (value, context)=> context.chart.data.datasets[0].data[context.dataIndex] &&
+              context.chart.data.datasets[0].data[context.dataIndex] + "%"
           }
         },
         {
           type: "bar",
           label: "2",
           ...this.getTangueValues(),
-          borderWidth: 1,
-          backgroundColor: "rgba(152, 152, 208, 0.2)",
+          borderWidth: [0,1,1,1,1,1,0],
+          backgroundColor: "#FFF",
           pointBorderWidth: 5,
           yAxisID: "y-axis-1",
           stack: "Stack 1",
           datalabels: {
             color: "black",
             anchor: "start",
-            formatter: function(value, context) {
-              return context.chart.data.datasets[1].labelData[
-                context.dataIndex
-              ];
-            },
+            formatter: (value, context)=>context.chart.data.datasets[1].labelData[context.dataIndex],
             font: { size: 12, style: "bold" },
             align: "end",
             anchor: "end",
@@ -91,15 +90,21 @@ class BarChart extends React.Component {
           }
         },
         {
+          spanGaps: true,
           type: "line",
           fill: false,
           borderColor: "#c9606f",
           yAxisID: "y-axis-2",
+          pointRadius: [0, 0, 0, 0, 0, 8, 0],
           datalabels: {
-            color: "black",
+            color: context => (context.dataIndex === 0 ? "blue" : "black"),
             anchor: "start",
             offset: 0,
             formatter: function(value, context) {
+              if (context.dataIndex === 0) {
+                context.chart.chartArea.left = 50;
+                context.chart.$datalabels._datasets[0][0]._el._yScale.left = 10;
+              }
               return context.chart.data.datasets[2].labelData[
                 context.dataIndex
               ];
@@ -111,11 +116,13 @@ class BarChart extends React.Component {
           ...this.getMaxValues()
         },
         {
+          spanGaps: false,
           type: "scatter",
           showLine: true,
           fill: false,
           borderColor: "#c9606f",
           yAxisID: "y-axis-3",
+          pointRadius: [0, 0, 0, 0, 0, 8, 0],
           datalabels: {
             color: "black",
             anchor: "start",
@@ -133,10 +140,11 @@ class BarChart extends React.Component {
       ]
     };
   }
+  
   getChartOptions() {
     return {
       layout: {
-        padding: { top: 40, left: -3, right: 10, bottom: 0 }
+        padding: { top: 40, left: -3, right: 30, bottom: 0 }
       },
       scales: {
         xAxes: [
@@ -147,7 +155,7 @@ class BarChart extends React.Component {
               fontFamily: "Roboto",
               fontSize: 12
             },
-            gridLines: { color: "rgba(0, 0, 0, 0)" },
+            gridLines: { display: false },
             categoryPercentage: 0.5,
             barPercentage: 1.2,
             stacked: true
@@ -161,18 +169,17 @@ class BarChart extends React.Component {
               max: 100,
               stepSize: 20,
               beginAtZero: true,
-              callback: function(label, index, labels) {
-                return label + "%";
-              }
-            }
+              callback: (label, index, labels) => label + "%"
+            },
+            gridLines: { display: false }
           },
           {
-            ticks: { max: 100, min: 10, stepSize: 1, beginAtZero: true },
+            ticks: { max: 100, min: 0, stepSize: 1, beginAtZero: true },
             display: false,
             id: "y-axis-2"
           },
           {
-            ticks: { beginAtZero: true, max: 100, min: 0, stepSize: 10 },
+            ticks: { max: 100, min: 0, stepSize: 1, beginAtZero: true },
             display: false,
             id: "y-axis-3"
           },
@@ -182,9 +189,7 @@ class BarChart extends React.Component {
               max: 200,
               stepSize: 20,
               beginAtZero: true,
-              callback: function(label, index, labels) {
-                return "";
-              }
+              callback: (label, index, labels) => ''
             },
             display: false,
             id: "y-axis-4"
@@ -197,18 +202,27 @@ class BarChart extends React.Component {
       maintainAspectRatio: false
     };
   }
+
   getMinValues() {
-    const { minList } = this.state;
+    const { minValueList, minPctList } = this.state;
     return {
-      data: minList.map(() => 10),
-      labelData: minList.map(i => `mix\n${this.numberWithCommas(i)}`)
+      data: minPctList,
+      labelData: minValueList.map((i, index) =>
+       index === 0
+          ? `${minPctList[0]}%`
+          :  i && `min\n${this.numberWithCommas(i)}`
+      )
     };
   }
   getMaxValues() {
-    const { maxList } = this.state;
+    const { maxValueList, maxPctList } = this.state;
     return {
-      data: maxList.map(() => 90),
-      labelData: maxList.map(i => `max\n${this.numberWithCommas(i)}`)
+      data: maxPctList,
+      labelData: maxValueList.map((i, index) =>
+        index === 0
+          ? `${maxPctList[0]}%`
+          : i && `max\n${this.numberWithCommas(i)}`
+      )
     };
   }
   getTangueValues() {
@@ -216,7 +230,9 @@ class BarChart extends React.Component {
     const data = percentageList.map(i => 100 - i);
     return {
       data,
-      labelData: tangueList.map((v, i) => `Tangue ${i + 1}\n${this.numberWithCommas(v)}`)
+      labelData: tangueList.map(
+        (v, i) => v && `Tangue ${i + 1}\n${this.numberWithCommas(v)}`
+      )
     };
   }
 
