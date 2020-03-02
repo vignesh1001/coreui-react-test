@@ -26,35 +26,12 @@ const styles = {
     opacity: 1
   }
 };
-
-/*
-  {
-    "mac": "3403de7f1f38",
-    "tank_num": 1,
-    "product_code": 1,
-    "product_name": "DIESEL",
-    "volume": 23807,
-    "tc_volume": 23743,
-    "ullage": 15716,
-    "height": 1679,
-    "water": 0,
-    "temperature": 23,
-    "water_volume": 0,
-    "cust_req_updated_on": "2020-02-29T03:38:57.897Z",
-    "Tank_capacity": 40000,
-    "min_warn_qty": 4000,
-    "max_warn_qty": 38000,
-    "alarm_message": "",
-    "txncode": "fb58c5bb3cc81798d59a0c1e333fa018"
-  },
-*/
 class BarChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      minPctList: [10, 10, 10, 10, 10, 10, 10],
-      maxPctList: [90, 90, 90, 90, 90, 90, 90],
-      ...this.prepareBarChartState()
+      chartOptions: {},
+      chartData: {}
     };
   }
 
@@ -69,17 +46,22 @@ class BarChart extends React.Component {
     const minValueList = ["", ...data.map(e => e.min_warn_qty), ""];
     const maxValueList = ["", ...data.map(e => e.max_warn_qty), ""];
     const tangueList = ["", ...data.map(e => e.Tank_capacity), ""];
-
+    const firstData = data.length && data[1];
     const minPctList = [
-      10,
+      firstData &&
+        Math.round((firstData.min_warn_qty * 100) / firstData.Tank_capacity),
       ...data.map(e => Math.round((e.min_warn_qty * 100) / e.Tank_capacity)),
-      10
+      firstData &&
+        Math.round((firstData.min_warn_qty * 100) / firstData.Tank_capacity)
     ];
     // const maxPctList = Math.round(data.max_warn_qty*100/data.Tank_capacity);
+
     const maxPctList = [
-      95,
+      firstData &&
+        Math.round((firstData.max_warn_qty * 100) / firstData.Tank_capacity),
       ...data.map(e => Math.round((e.max_warn_qty * 100) / e.Tank_capacity)),
-      95
+      firstData &&
+        Math.round((firstData.max_warn_qty * 100) / firstData.Tank_capacity)
     ];
     return {
       percentageList,
@@ -91,12 +73,27 @@ class BarChart extends React.Component {
       maxPctList
     };
   }
+  componentDidMount() {
+    this.setState(this.prepareBarChartState(), () => this.updateChartData());
+  }
 
+  componentDidUpdate(prevProps) {
+    const { data: prevData } = prevProps;
+    const { data } = this.props;
+    if (data.length !== prevData.length) {
+      this.setState(this.prepareBarChartState(), () => this.updateChartData());
+    }
+  }
+  updateChartData() {
+    const chartOptions = this.getChartOptions();
+    const chartData = this.getChartData();
+    this.setState({ chartOptions, chartData });
+  }
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   getChartData() {
-    const { percentageList, chartLabels } = this.state;
+    const { percentageList=[], chartLabels=[] } = this.state;
     const barBgColor = percentageList.map(pctVal =>
       pctVal < 10 || pctVal > 95 ? "#f00" : pctVal < 20 ? "#f0f009" : "#45a973"
     );
@@ -159,8 +156,6 @@ class BarChart extends React.Component {
                   "Hi",
                   context.chart.$datalabels._datasets[0][1]._el
                 );
-                //context.chart.$datalabels._datasets[0][2].pointRadius = [0, 0, 0, 0, 0, 8, 0];
-                // myChart1.data.datasets[0].pointRadius = [0, 0, 0, 0, 0, 8, 0];
               }
               return context.chart.data.datasets[2].labelData[
                 context.dataIndex
@@ -261,18 +256,18 @@ class BarChart extends React.Component {
   }
 
   getMinValues() {
-    const { minValueList, minPctList } = this.state;
+    const { minValueList=[], minPctList=[] } = this.state;
     return {
       data: minPctList,
       labelData: minValueList.map((i, index) =>
         index === 0
-          ? `${minPctList[0]}%`
+          ? minPctList.length && `${minPctList[0]}%`
           : i && `min\n${this.numberWithCommas(i)}`
       )
     };
   }
   getMaxValues() {
-    const { maxValueList, maxPctList } = this.state;
+    const { maxValueList=[], maxPctList=[] } = this.state;
     return {
       data: maxPctList,
       labelData: maxValueList.map((i, index) =>
@@ -283,7 +278,7 @@ class BarChart extends React.Component {
     };
   }
   getTangueValues() {
-    const { percentageList, tangueList } = this.state;
+    const { percentageList=[], tangueList=[] } = this.state;
     const data = percentageList.map(i => i && 100 - i);
     return {
       data,
@@ -294,8 +289,7 @@ class BarChart extends React.Component {
   }
 
   render() {
-    const options = this.getChartOptions();
-    const data = this.getChartData();
+    const { chartData, chartOptions } = this.state;
     return (
       <div className="col-lg-8 col-md-8 col-sm-10 col-xs-12 pdg-0px">
         <Container className="bar-chart">
@@ -303,7 +297,7 @@ class BarChart extends React.Component {
             <Card>
               <CardBody>
                 <div className="chart-wrapper">
-                  <Line data={data} options={options} />
+                  <Line data={chartData} options={chartOptions} />
                 </div>
               </CardBody>
             </Card>
