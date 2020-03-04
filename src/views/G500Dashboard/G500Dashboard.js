@@ -37,10 +37,11 @@ class G500Dashboard extends React.Component {
         {/* <SupplierAnalysis />
          <Alerts />
          <Performance />
-         <TotalRevenue /> \
-         */}
+         <TotalRevenue /> 
          <InventoryPeriod data={responseJSON} /> 
         <BarChart />
+         */} 
+         <OneBarChart />
       </div>
     )
   }

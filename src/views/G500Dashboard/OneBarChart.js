@@ -39,10 +39,18 @@ class OneBarChart extends React.Component {
       maxPctList: [60, 60, 60],
       tangueList: ["", 50000, ""],
       isWeekDDOpen: false,
-      weekDDValue: "This Week"
+      weekDDValue: "This Week",
+      chartDataObject:{"mac":"3403de7f1f38","tank_num":2,"product_code":2,"product_name":"DIESEL","volume":12918,"tc_volume":12872,"ullage":36658,"height":1003,"water":0,"temperature":23,"water_volume":0,"cust_req_updated_on":"2020-02-29T03:38:57.897Z","Tank_capacity":50000,"min_warn_qty":5000,"max_warn_qty":47500,"alarm_message":"","txncode":"39f568f65e470c3b9fc768349c8f77b3"}
     };
   }
-
+  componentDidMount() {
+    this.updateChartData();
+  }
+  updateChartData() {
+    const chartOptions =  this.getChartOptions();
+    const chartData =  this.getChartData();
+    this.setState({chartOptions,chartData});
+  }
   numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
@@ -201,7 +209,56 @@ class OneBarChart extends React.Component {
         ]
       },
       legend: { display: false },
-      tooltips: { enabled: false, custom: CustomTooltips },
+      tooltips: {
+        enabled: false,
+        custom: (tooltipModel,tooltip1)=>{
+          const {chartDataObject}=this.state;
+          var tooltipEl = document.getElementById('chartjs-tooltip');
+          if (!tooltipEl) {
+              tooltipEl = document.createElement('div');
+              tooltipEl.id = 'chartjs-tooltip';
+              tooltipEl.innerHTML = '<table></table>';
+              document.body.appendChild(tooltipEl);
+          }
+          if (tooltipModel.opacity === 0) {
+              tooltipEl.style.opacity = 0;
+              return;
+          }
+          tooltipEl.classList.remove('above', 'below', 'no-transform');
+          if (tooltipModel.yAlign) {
+              tooltipEl.classList.add(tooltipModel.yAlign);
+          } else {
+              tooltipEl.classList.add('no-transform');
+          }
+          function getBody(bodyItem) {
+            return bodyItem.lines;
+          }
+          if (tooltipModel.body) {
+              var titleLines = tooltipModel.title || [];
+              var bodyLines = tooltipModel.body.map(getBody);
+              const addTableRow = (hText,cText)=>`<tr><td>${hText}</td><td>${cText}</td></tr>`;
+              var innerHtml = '<tbody>';
+              innerHtml += addTableRow('Tanque #',chartDataObject.tank_num);
+              innerHtml += addTableRow('Volumen ',this.numberWithCommas(chartDataObject.volume));
+              innerHtml += addTableRow('nivel max(Lts)',this.numberWithCommas(chartDataObject.max_warn_qty));
+              innerHtml += addTableRow('nivel min(Lts)',this.numberWithCommas(chartDataObject.min_warn_qty));
+              innerHtml += addTableRow('Capacidad Tanque(Lts)',this.numberWithCommas(chartDataObject.Tank_capacity));
+              innerHtml += '</tbody>';
+              var tableRoot = tooltipEl.querySelector('table');
+              tableRoot.innerHTML = innerHtml;
+          }
+          var position = this.state.percentageList._chartjs.listeners[0].chart.canvas.getBoundingClientRect();
+          tooltipEl.style.opacity = 1;
+          tooltipEl.style.position = 'absolute';
+          tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+          tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY+10+ 'px';
+          tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily;
+          tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+          tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
+          tooltipEl.style.pointerEvents = 'none';
+          tooltipEl.style.backgroundColor = '#eee';
+      } 
+      },
       responsive: true,
       maintainAspectRatio: false
     };
@@ -238,10 +295,8 @@ class OneBarChart extends React.Component {
       )
     };
   }
-
   render() {
-    const options = this.getChartOptions();
-    const data = this.getChartData();
+    const {chartOptions,chartData} = this.state;
     return (
       <div className="col-lg-8 col-md-8 col-sm-10 col-xs-12 pdg-0px">
         <Container className="one-bar-chart">
@@ -249,7 +304,7 @@ class OneBarChart extends React.Component {
             <Card>
               <CardBody>
                 <div className="chart-wrapper">
-                  <Line data={data} options={options} />
+                  <Line data={chartData} options={chartOptions} />
                 </div>
               </CardBody>
             </Card>
